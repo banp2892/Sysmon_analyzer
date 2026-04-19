@@ -24,13 +24,22 @@
 */
 var NAVTREE =
 [
-  [ "MenuMolka", "index.html", [
-    [ "Список задач", "todo.html", null ],
+  [ "Sysmon_analyzer", "index.html", [
+    [ "Классы", "annotated.html", [
+      [ "Классы", "annotated.html", "annotated_dup" ],
+      [ "Алфавитный указатель классов", "classes.html", null ],
+      [ "Члены классов", "functions.html", [
+        [ "Указатель", "functions.html", null ],
+        [ "Функции", "functions_func.html", null ],
+        [ "Переменные", "functions_vars.html", null ]
+      ] ]
+    ] ],
     [ "Файлы", "files.html", [
       [ "Файлы", "files.html", "files_dup" ],
       [ "Список членов всех файлов", "globals.html", [
         [ "Указатель", "globals.html", null ],
-        [ "Функции", "globals_func.html", null ]
+        [ "Функции", "globals_func.html", null ],
+        [ "Макросы", "globals_defs.html", null ]
       ] ]
     ] ]
   ] ]
@@ -38,7 +47,7 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"_source_8cpp.html"
+"_event_feature_8cpp.html"
 ];
 
 var SYNCONMSG = 'нажмите на выключить для синхронизации панелей';

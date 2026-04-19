@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.16.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>MenuMolka: Файл Sysmon_analyzer/Source.cpp</title>
+<title>Sysmon_analyzer: Файл Sysmon_analyzer/Source.cpp</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -26,7 +26,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">MenuMolka
+   <div id="projectname">Sysmon_analyzer
    </div>
   </td>
  </tr>
@@ -93,22 +93,15 @@ $(function(){initNavTree('_source_8cpp.html','',''); });
 <div class="contents">
 <div class="textblock"><code>#include &lt;iostream&gt;</code><br />
 <code>#include &lt;vector&gt;</code><br />
-<code>#include &lt;windows.h&gt;</code><br />
-<code>#include &lt;evntrace.h&gt;</code><br />
-<code>#include &lt;evntcons.h&gt;</code><br />
-<code>#include &lt;tdh.h&gt;</code><br />
+<code>#include &quot;<a class="el" href="_sysmon_collector_8h_source.html">SysmonCollector.h</a>&quot;</code><br />
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Функции</h2></td></tr>
-<tr class="memitem:a12e33a832be563cb821dbfea1a18bfc0" id="r_a12e33a832be563cb821dbfea1a18bfc0"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a12e33a832be563cb821dbfea1a18bfc0">SetupTraceProperties</a> (std::vector&lt; unsigned char &gt; &amp;buffer, const wchar_t *sessionName)</td></tr>
-<tr class="memdesc:a12e33a832be563cb821dbfea1a18bfc0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Настраивает буфер для сессии трассировки  <br /></td></tr>
-<tr class="memitem:a1f2b2c4b49408e9bc59c9037781f7c6d" id="r_a1f2b2c4b49408e9bc59c9037781f7c6d"><td class="memItemLeft">void WINAPI&#160;</td><td class="memItemRight"><a class="el" href="#a1f2b2c4b49408e9bc59c9037781f7c6d">OnEventRecord</a> (PEVENT_RECORD pEvent)</td></tr>
-<tr class="memdesc:a1f2b2c4b49408e9bc59c9037781f7c6d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Функция выводит в консоль информацию из sysmon.  <br /></td></tr>
-<tr class="memitem:a0ddf1224851353fc92bfbff6f499fa97" id="r_a0ddf1224851353fc92bfbff6f499fa97"><td class="memItemLeft">int&#160;</td><td class="memItemRight"><a class="el" href="#a0ddf1224851353fc92bfbff6f499fa97">main</a> (int argc, char *argv[])</td></tr>
+<tr class="memitem:ae66f6b31b5ad750f1fe042a706a4e3d4" id="r_ae66f6b31b5ad750f1fe042a706a4e3d4"><td class="memItemLeft">int&#160;</td><td class="memItemRight"><a class="el" href="#ae66f6b31b5ad750f1fe042a706a4e3d4">main</a> ()</td></tr>
 </table>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Функции</h2>
-<a id="a0ddf1224851353fc92bfbff6f499fa97" name="a0ddf1224851353fc92bfbff6f499fa97"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0ddf1224851353fc92bfbff6f499fa97">&#9670;&#160;</a></span>main()</h2>
+<a id="ae66f6b31b5ad750f1fe042a706a4e3d4" name="ae66f6b31b5ad750f1fe042a706a4e3d4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae66f6b31b5ad750f1fe042a706a4e3d4">&#9670;&#160;</a></span>main()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -116,59 +109,11 @@ $(function(){initNavTree('_source_8cpp.html','',''); });
         <tr>
           <td class="memname">int main </td>
           <td>(</td>
-          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>argc</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">char *</td>          <td class="paramname"><span class="paramname"><em>argv</em></span>[]&#160;)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000001">Необходимо сделать</a></b></dt><dd>Этот Guid скорее всего уникальный? нужно как-то научиться его определять </dd></dl>
-
-</div>
-</div>
-<a id="a1f2b2c4b49408e9bc59c9037781f7c6d" name="a1f2b2c4b49408e9bc59c9037781f7c6d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1f2b2c4b49408e9bc59c9037781f7c6d">&#9670;&#160;</a></span>OnEventRecord()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void WINAPI OnEventRecord </td>
-          <td>(</td>
-          <td class="paramtype">PEVENT_RECORD</td>          <td class="paramname"><span class="paramname"><em>pEvent</em></span></td><td>)</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Функция выводит в консоль информацию из sysmon. </p>
-
-</div>
-</div>
-<a id="a12e33a832be563cb821dbfea1a18bfc0" name="a12e33a832be563cb821dbfea1a18bfc0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a12e33a832be563cb821dbfea1a18bfc0">&#9670;&#160;</a></span>SetupTraceProperties()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void SetupTraceProperties </td>
-          <td>(</td>
-          <td class="paramtype">std::vector&lt; unsigned char &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>buffer</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const wchar_t *</td>          <td class="paramname"><span class="paramname"><em>sessionName</em></span>&#160;)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Настраивает буфер для сессии трассировки </p>
-<dl class="section note"><dt>Заметки</dt><dd>Запускаем чтобы создать структуру EVENT_TRACE_PROPERTIES, которую в дальнейшем будем использовать </dd></dl>
 
 </div>
 </div>

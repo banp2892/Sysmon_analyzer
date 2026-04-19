@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['main_0',['main',['../_source_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97',1,'Source.cpp']]]
+  ['calculateentropy_0',['CalculateEntropy',['../struct_event_feature.html#a1487cdaccce47310e2ca675d851891da',1,'EventFeature']]]
 ];

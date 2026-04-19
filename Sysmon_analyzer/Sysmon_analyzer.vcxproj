@@ -124,10 +124,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="EventFeature.cpp" />
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="SysmonCollector.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ETW.h" />
+    <ClInclude Include="EventFeature.h" />
+    <ClInclude Include="SysmonCollector.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
