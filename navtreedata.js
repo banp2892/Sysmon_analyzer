@@ -25,7 +25,7 @@
 var NAVTREE =
 [
   [ "Sysmon_analyzer", "index.html", [
-    [ "Windows IDS (Intrusion Detection System) base on Sysmon & ETW", "md_Sysmon__analyzer_2Readme.html", null ],
+    [ "Windows IDS (Intrusion Detection System) base on Sysmon & ETW", "md_Readme.html", null ],
     [ "Классы", "annotated.html", [
       [ "Классы", "annotated.html", "annotated_dup" ],
       [ "Алфавитный указатель классов", "classes.html", null ],
