@@ -31,3 +31,8 @@ jobs:
         with:
           folder: html
           branch: gh-pages
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: doxygen-docs
+          path: html/
