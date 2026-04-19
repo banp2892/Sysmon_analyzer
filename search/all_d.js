@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['_7esysmoncollector_0',['~SysmonCollector',['../classSysmonCollector.html#a05258cb410dd1d15eb00927ac206d279',1,'SysmonCollector']]]
+  ['readme_2emd_0',['Readme.md',['../Readme_8md.html',1,'']]],
+  ['run_1',['Run',['../classSysmonCollector.html#a701b0f1201c54639c575354b791ce21e',1,'SysmonCollector']]]
 ];
