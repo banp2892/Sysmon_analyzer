@@ -6,7 +6,12 @@
 
 #include <evntrace.h> // Основные функции и структуры трассировки
 #include <evntcons.h> // Константы для потребителей событий
-#include <tdh.h>      // Trace Data Helper для парсинга данных
+
+#include <iomanip> // для чтения числа DWORD
+
+
+#include <tdh.h>
+#pragma comment(lib, "tdh.lib")
 
 /**
 * @brief Настраивает буфер для сессии трассировки
@@ -32,6 +37,79 @@ void SetupTraceProperties(std::vector<unsigned char>& buffer, const wchar_t* ses
 	wcscpy_s(nameLocation, MAX_PATH, sessionName);
 
 }
+
+
+
+/** @brief Вспомогательная функция для получения ЧИСЛА(DWORD)
+*/ 
+DWORD GetEventPropertyInt(PEVENT_RECORD pEvent, const wchar_t* propertyName) {
+	PROPERTY_DATA_DESCRIPTOR descriptor;
+	descriptor.PropertyName = (ULONGLONG)propertyName;
+	descriptor.ArrayIndex = 0;
+
+	DWORD propertyValue = 0;
+	DWORD bufferSize = sizeof(DWORD);
+
+	if (TdhGetProperty(pEvent, 0, NULL, 1, &descriptor, bufferSize, (PBYTE)&propertyValue) == ERROR_SUCCESS) {
+		return propertyValue;
+	}
+	return 0;
+}
+
+/** @brief Вспомогательная функция для получения значения свойства как строки
+*/ 
+std::wstring GetEventProperty(PEVENT_RECORD pEvent, PTRACE_EVENT_INFO pInfo, const wchar_t* propertyName) {
+	PROPERTY_DATA_DESCRIPTOR descriptor;
+	descriptor.PropertyName = (ULONGLONG)propertyName;
+	descriptor.ArrayIndex = 0;
+
+	DWORD bufferSize = 0;
+	TdhGetPropertySize(pEvent, 0, NULL, 1, &descriptor, &bufferSize);
+
+	std::vector<BYTE> propertyBuffer(bufferSize);
+	// 2. Получаем сами данные
+	if (TdhGetProperty(pEvent, 0, NULL, 1, &descriptor, bufferSize, propertyBuffer.data()) == ERROR_SUCCESS) {
+		return std::wstring((wchar_t*)propertyBuffer.data());
+	}
+	return L"";
+}
+
+void WINAPI OnEventRecord(PEVENT_RECORD pEvent) {
+	DWORD bufferSize = 0;
+	PTRACE_EVENT_INFO pInfo = NULL;
+
+	if (TdhGetEventInformation(pEvent, 0, NULL, pInfo, &bufferSize) == ERROR_INSUFFICIENT_BUFFER) {
+		pInfo = (PTRACE_EVENT_INFO)malloc(bufferSize); // сначала задаем размер буфера
+		if (TdhGetEventInformation(pEvent, 0, NULL, pInfo, &bufferSize) == ERROR_SUCCESS) {
+
+
+
+			// Если это ID 3 (Network Connection)
+			if (pEvent->EventHeader.EventDescriptor.Id == 3) {
+				std::wstring UtcTime = GetEventProperty(pEvent, pInfo, L"UtcTime");
+				std::wstring imagePath = GetEventProperty(pEvent, pInfo, L"Image");
+				std::wstring destIp = GetEventProperty(pEvent, pInfo, L"DestinationIp");
+				 
+				DWORD destPort = GetEventPropertyInt(pEvent, L"DestinationPort");
+
+				std::wcout << L"[NET] TIME: " << UtcTime<< L" " << imagePath
+					<< L" -> " << destIp << L":" << destPort << std::endl;
+			}
+
+			// Если это ID 1 (Process Create)
+			if (pEvent->EventHeader.EventDescriptor.Id == 1) {
+				std::wstring commandLine = GetEventProperty(pEvent, pInfo, L"CommandLine");
+				std::wcout << L"[PROC] New process: " << commandLine << std::endl;
+			}
+
+			
+		}
+		free(pInfo);
+	}
+}
+
+
+
 
 int main(int argc, char* argv[]) {
 	
@@ -76,7 +154,7 @@ int main(int argc, char* argv[]) {
 	logFile.ProcessTraceMode = PROCESS_TRACE_MODE_REAL_TIME | PROCESS_TRACE_MODE_EVENT_RECORD;
 
 	logFile.EventRecordCallback = [](PEVENT_RECORD pEvent) {
-		std::cout << "Поймал событие: id = " << pEvent->EventHeader.EventDescriptor.Id << std::endl;
+		OnEventRecord(pEvent);
 		};
 	TRACEHANDLE traceHandle = OpenTraceW(&logFile);
 
