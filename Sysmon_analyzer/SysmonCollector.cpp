@@ -4,7 +4,8 @@
 #pragma comment(lib, "tdh.lib")
 #pragma comment(lib, "advapi32.lib")
 
-SysmonCollector::SysmonCollector(const wchar_t* name) : m_sessionName(name) {
+SysmonCollector::SysmonCollector(const wchar_t* name, PreparationData* prep) : m_sessionName(name){
+    m_preparator = prep;
     SetupProperties();
     StopOldSession();
     StartSession();
@@ -65,19 +66,50 @@ void WINAPI SysmonCollector::OnEventRecord(PEVENT_RECORD pEvent) {
 }
 
 void SysmonCollector::ParseAndLog(PEVENT_RECORD pEvent, PTRACE_EVENT_INFO pInfo) {
-    switch (pEvent->EventHeader.EventDescriptor.Id) {
-    case 3: { // Network connection
-        std::wstring path = GetEventProperty(pEvent, pInfo, L"Image");
-        DWORD port = GetEventPropertyInt(pEvent, L"DestinationPort");
-        std::wcout << L"[NET] " << path << L" Port: " << port << std::endl;
+    USHORT eventId = pEvent->EventHeader.EventDescriptor.Id;
+
+    switch (eventId) {
+    case 1: { // Процесс: Создание (Process Creation)
+        ProcessData pd;
+        pd.imagePath = GetEventProperty(pEvent, pInfo, L"Image");
+        pd.commandLine = GetEventProperty(pEvent, pInfo, L"CommandLine");
+        pd.processId = pEvent->EventHeader.ProcessId;
+
+        if (m_preparator) {
+            m_preparator->PrepareProcess(pd);
+        }
+
+        std::wcout << L"[PROC] ID: " << pd.processId
+            << L" | Ent: " << pd.entropy
+            << L" | Path: " << pd.imagePath << std::endl;
         break;
     }
-    case 1: { // Process creation
-        std::wstring cmd = GetEventProperty(pEvent, pInfo, L"CommandLine");
-        double ent = EventFeature::CalculateEntropy(cmd);
-        std::wcout << L"[PROC] Entropy: " << ent << L" CMD: " << cmd << std::endl;
+
+    case 3: { // Сеть: Сетевое соединение (Network Connection)
+
+        NetworkData nd;
+        nd.imagePath = GetEventProperty(pEvent, pInfo, L"Image");
+        nd.destIp = GetEventProperty(pEvent, pInfo, L"DestinationIp");
+        nd.destPort = GetEventPropertyInt(pEvent, L"DestinationPort");
+
+        if (m_preparator) {
+            m_preparator->PrepareNetwork(nd);
+        }
+
+        std::wcout << L"[NET] " << nd.imagePath
+            << L" -> " << nd.destIp
+            << L":" << nd.destPort << std::endl;
         break;
     }
+
+    case 11: { // Файлы: Создание файла (File Create)
+
+        break;
+    }
+
+    default:
+
+        break;
     }
 }
 

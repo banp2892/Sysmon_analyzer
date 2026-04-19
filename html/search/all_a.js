@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['timestamp_0',['timestamp',['../struct_event_feature.html#ad2b31a58e6ac53bd3104359470c4bd7d',1,'EventFeature']]],
-  ['tocsv_1',['ToCSV',['../struct_event_feature.html#a1919eedf6fc2da2a18ffc84171844438',1,'EventFeature']]]
+  ['run_0',['Run',['../class_sysmon_collector.html#a701b0f1201c54639c575354b791ce21e',1,'SysmonCollector']]]
 ];

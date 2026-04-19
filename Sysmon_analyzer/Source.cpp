@@ -3,18 +3,18 @@
 #include <vector>
 
 
-#include "SysmonCollector.h"
+
 #pragma comment(lib, "tdh.lib")
 
+#include "SysmonCollector.h"
+#include "PreparationData.h"
+
 int main() {
-    setlocale(LC_ALL, "Russian");
-    try {
-        SysmonCollector collector(L"MySysmode");
-        std::cout << "Система захвата запущена..." << std::endl;
-        collector.Run(); // Здесь программа "зависнет" в ожидании событий
-    }
-    catch (...) {
-        std::cerr << "Что-то пошло не так!" << std::endl;
-    }
+    PreparationData preparator;
+
+    // Передаем адрес объекта (&preparator), так как конструктор ждет PreparationData*
+    SysmonCollector collector(L"MySysmonSession", &preparator);
+
+    collector.Run();
     return 0;
 }

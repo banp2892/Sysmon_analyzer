@@ -117,6 +117,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -124,12 +125,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="EventFeature.cpp" />
+    <ClCompile Include="PreparationData.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="SysmonCollector.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="EventFeature.h" />
+    <ClInclude Include="PreparationData.h" />
+    <ClInclude Include="Structures.h" />
     <ClInclude Include="SysmonCollector.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

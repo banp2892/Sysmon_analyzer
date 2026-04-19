@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['cmdline_0',['cmdLine',['../struct_event_feature.html#a4cdff8a1f9d77e5919efcd6386b0c805',1,'EventFeature']]]
+  ['commandline_0',['commandLine',['../struct_process_data.html#aaf9e61055e2efa13194584e1cda75778',1,'ProcessData']]],
+  ['creationtime_1',['creationTime',['../struct_file_data.html#af2ef2d68e118f340a976353145db409e',1,'FileData']]]
 ];

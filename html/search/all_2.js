@@ -1,9 +1,7 @@
 var searchData=
 [
   ['enablesysmon_0',['EnableSysmon',['../class_sysmon_collector.html#aac014f74b7edad9639b3230901422f29',1,'SysmonCollector']]],
-  ['entropy_1',['entropy',['../struct_event_feature.html#aaad2d91abb3a724a9a5a54f31353c31c',1,'EventFeature']]],
-  ['eventfeature_2',['EventFeature',['../struct_event_feature.html',1,'']]],
-  ['eventfeature_2ecpp_3',['EventFeature.cpp',['../_event_feature_8cpp.html',1,'']]],
-  ['eventfeature_2eh_4',['EventFeature.h',['../_event_feature_8h.html',1,'']]],
-  ['eventid_5',['eventId',['../struct_event_feature.html#a2306a7f38824653cc1d719c5b277aa44',1,'EventFeature']]]
+  ['entropy_1',['entropy',['../struct_process_data.html#a069eb3cf886fff49731af2e9ebec4eed',1,'ProcessData']]],
+  ['eventdata_2',['eventData',['../struct_sysmon_event.html#a9d1d801fb7b159e116214e3db04fe548',1,'SysmonEvent']]],
+  ['eventid_3',['eventId',['../struct_sysmon_event.html#a0696bb420be9e0f009d5fe1a1df120e8',1,'SysmonEvent']]]
 ];

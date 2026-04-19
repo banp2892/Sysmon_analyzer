@@ -5,7 +5,8 @@
 #include <tdh.h>
 #include <vector>
 #include <string>
-#include "EventFeature.h"
+#include "PreparationData.h"
+#include "Structures.h"
 
 /**
  * @class SysmonCollector
@@ -19,13 +20,14 @@ private:
     TRACEHANDLE m_traceHandle = 0;   ///< Хэндл открытого лога (потребителя)
     std::wstring m_sessionName;      ///< Имя сессии трассировки
     std::vector<unsigned char> m_propsBuffer; ///< Буфер для свойств сессии
+    static inline PreparationData* m_preparator = nullptr; ///< Указатель на обработчик данных
 
 public:
     /**
      * @brief Конструктор: подготавливает и запускает сессию Sysmon.
      * @param name Имя сессии трассировки.
      */
-    SysmonCollector(const wchar_t* name);
+    SysmonCollector(const wchar_t* name, PreparationData* prep);
 
     /**
      * @brief Деструктор: останавливает сессию трассировки и освобождает ресурсы.

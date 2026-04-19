@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['timestamp_0',['timestamp',['../struct_event_feature.html#ad2b31a58e6ac53bd3104359470c4bd7d',1,'EventFeature']]]
+  ['parentprocessid_0',['parentProcessId',['../struct_process_data.html#aab682e2e428dee890a1d1ca8eebf8d54',1,'ProcessData']]],
+  ['processid_1',['processId',['../struct_process_data.html#aa49a88a78a6d0751784bfeb179df1d2f',1,'ProcessData']]],
+  ['protocol_2',['protocol',['../struct_network_data.html#a424235557a5b292df02b1939ffa46de6',1,'NetworkData']]]
 ];

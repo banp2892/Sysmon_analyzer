@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['destip_0',['destIp',['../struct_event_feature.html#ac3b4c3e16695ce690b145c956589c0f1',1,'EventFeature']]],
-  ['destport_1',['destPort',['../struct_event_feature.html#a1715810afb547059070c0436012c5ec1',1,'EventFeature']]]
+  ['destip_0',['destIp',['../struct_network_data.html#aec871e42a31671812329c0067c92e3a3',1,'NetworkData']]],
+  ['destport_1',['destPort',['../struct_network_data.html#a31f6fc05eed0a3e1c434be001d6944ff',1,'NetworkData']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['sysmoncollector_0',['SysmonCollector',['../class_sysmon_collector.html',1,'']]]
+  ['networkdata_0',['NetworkData',['../struct_network_data.html',1,'']]]
 ];

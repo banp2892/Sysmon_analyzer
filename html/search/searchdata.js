@@ -1,11 +1,10 @@
 var indexSectionsWithContent =
 {
-  0: "cdegimoprstw~",
-  1: "es",
-  2: "es",
-  3: "cegmoprst~",
-  4: "cdeimt",
-  5: "w"
+  0: "cdefgimnoprst~",
+  1: "fnps",
+  2: "ps",
+  3: "cegmoprs~",
+  4: "cdeimpt"
 };
 
 var indexSectionNames =
@@ -14,8 +13,7 @@ var indexSectionNames =
   1: "classes",
   2: "files",
   3: "functions",
-  4: "variables",
-  5: "defines"
+  4: "variables"
 };
 
 var indexSectionLabels =
@@ -24,7 +22,6 @@ var indexSectionLabels =
   1: "Классы",
   2: "Файлы",
   3: "Функции",
-  4: "Переменные",
-  5: "Макросы"
+  4: "Переменные"
 };
 

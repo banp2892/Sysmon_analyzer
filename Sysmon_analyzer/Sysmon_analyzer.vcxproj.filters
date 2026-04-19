@@ -18,7 +18,7 @@
     <ClCompile Include="Source.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="EventFeature.cpp">
+    <ClCompile Include="PreparationData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SysmonCollector.cpp">
@@ -26,10 +26,13 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="EventFeature.h">
+    <ClInclude Include="PreparationData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SysmonCollector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Structures.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
