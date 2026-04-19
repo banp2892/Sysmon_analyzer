@@ -40,5 +40,8 @@
     <None Include="..\doxygen">
       <Filter>Source Files</Filter>
     </None>
+    <None Include="Readme.md">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
