@@ -119,14 +119,14 @@ $(function(){initNavTree('class_sysmon_collector.html','','class_sysmon_collecto
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-static-methods" class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
 Закрытые статические члены</h2></td></tr>
-<tr class="memitem:a72af115ca5e4fea06477684fdec02a84" id="r_a72af115ca5e4fea06477684fdec02a84"><td class="memItemLeft">static void WINAPI&#160;</td><td class="memItemRight"><a class="el" href="#a72af115ca5e4fea06477684fdec02a84">OnEventRecord</a> (PEVENT_RECORD pEvent)</td></tr>
-<tr class="memdesc:a72af115ca5e4fea06477684fdec02a84"><td class="mdescLeft">&#160;</td><td class="mdescRight">Статический обратный вызов (Callback), вызываемый Windows при поступлении каждого события.  <br /></td></tr>
-<tr class="memitem:ab0f68d4e1b28a4da6b6fb0a18adf4f80" id="r_ab0f68d4e1b28a4da6b6fb0a18adf4f80"><td class="memItemLeft">static void&#160;</td><td class="memItemRight"><a class="el" href="#ab0f68d4e1b28a4da6b6fb0a18adf4f80">ParseAndLog</a> (PEVENT_RECORD pEvent, PTRACE_EVENT_INFO pInfo)</td></tr>
-<tr class="memdesc:ab0f68d4e1b28a4da6b6fb0a18adf4f80"><td class="mdescLeft">&#160;</td><td class="mdescRight">Выполняет высокоуровневую фильтрацию и логирование событий на основе их Event ID.  <br /></td></tr>
-<tr class="memitem:a31ae7e44a10811a1755549d0cd069754" id="r_a31ae7e44a10811a1755549d0cd069754"><td class="memItemLeft">static std::wstring&#160;</td><td class="memItemRight"><a class="el" href="#a31ae7e44a10811a1755549d0cd069754">GetEventProperty</a> (PEVENT_RECORD pEvent, PTRACE_EVENT_INFO pInfo, const wchar_t *name)</td></tr>
-<tr class="memdesc:a31ae7e44a10811a1755549d0cd069754"><td class="mdescLeft">&#160;</td><td class="mdescRight">Извлекает строковое свойство из данных события.  <br /></td></tr>
-<tr class="memitem:a78bc59a4856767bb127f0aff50e3147c" id="r_a78bc59a4856767bb127f0aff50e3147c"><td class="memItemLeft">static DWORD&#160;</td><td class="memItemRight"><a class="el" href="#a78bc59a4856767bb127f0aff50e3147c">GetEventPropertyInt</a> (PEVENT_RECORD pEvent, const wchar_t *name)</td></tr>
-<tr class="memdesc:a78bc59a4856767bb127f0aff50e3147c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Извлекает целочисленное (DWORD) свойство из данных события.  <br /></td></tr>
+<tr class="memitem:abd61374a22d672db56e49aa352fab324" id="r_abd61374a22d672db56e49aa352fab324"><td class="memItemLeft">static void WINAPI&#160;</td><td class="memItemRight"><a class="el" href="#abd61374a22d672db56e49aa352fab324">OnEventRecord</a> (PEVENT_RECORD pEvent)</td></tr>
+<tr class="memdesc:abd61374a22d672db56e49aa352fab324"><td class="mdescLeft">&#160;</td><td class="mdescRight">Статический обратный вызов (Callback), вызываемый Windows при поступлении каждого события.  <br /></td></tr>
+<tr class="memitem:a213457f8ac7e0a0a3691a89386605959" id="r_a213457f8ac7e0a0a3691a89386605959"><td class="memItemLeft">static void&#160;</td><td class="memItemRight"><a class="el" href="#a213457f8ac7e0a0a3691a89386605959">ParseAndLog</a> (PEVENT_RECORD pEvent, PTRACE_EVENT_INFO pInfo)</td></tr>
+<tr class="memdesc:a213457f8ac7e0a0a3691a89386605959"><td class="mdescLeft">&#160;</td><td class="mdescRight">Выполняет высокоуровневую фильтрацию и логирование событий на основе их Event ID.  <br /></td></tr>
+<tr class="memitem:a0bfa96142a08518844ede9037adb5134" id="r_a0bfa96142a08518844ede9037adb5134"><td class="memItemLeft">static std::wstring&#160;</td><td class="memItemRight"><a class="el" href="#a0bfa96142a08518844ede9037adb5134">GetEventProperty</a> (PEVENT_RECORD pEvent, PTRACE_EVENT_INFO pInfo, const wchar_t *name)</td></tr>
+<tr class="memdesc:a0bfa96142a08518844ede9037adb5134"><td class="mdescLeft">&#160;</td><td class="mdescRight">Извлекает строковое свойство из данных события.  <br /></td></tr>
+<tr class="memitem:ab55030edf808a03cc04df83c751ee393" id="r_ab55030edf808a03cc04df83c751ee393"><td class="memItemLeft">static DWORD&#160;</td><td class="memItemRight"><a class="el" href="#ab55030edf808a03cc04df83c751ee393">GetEventPropertyInt</a> (PEVENT_RECORD pEvent, const wchar_t *name)</td></tr>
+<tr class="memdesc:ab55030edf808a03cc04df83c751ee393"><td class="mdescLeft">&#160;</td><td class="mdescRight">Извлекает целочисленное (DWORD) свойство из данных события.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-attribs" class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Закрытые данные</h2></td></tr>
@@ -150,9 +150,6 @@ $(function(){initNavTree('class_sysmon_collector.html','','class_sysmon_collecto
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">SysmonCollector::SysmonCollector </td>
@@ -161,11 +158,6 @@ $(function(){initNavTree('class_sysmon_collector.html','','class_sysmon_collecto
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>Конструктор: подготавливает и запускает сессию Sysmon. </p>
@@ -183,9 +175,6 @@ $(function(){initNavTree('class_sysmon_collector.html','','class_sysmon_collecto
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">SysmonCollector::~SysmonCollector </td>
@@ -194,11 +183,6 @@ $(function(){initNavTree('class_sysmon_collector.html','','class_sysmon_collecto
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>Деструктор: останавливает сессию трассировки и освобождает ресурсы. </p>
@@ -224,7 +208,7 @@ $(function(){initNavTree('class_sysmon_collector.html','','class_sysmon_collecto
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel private">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -233,8 +217,8 @@ $(function(){initNavTree('class_sysmon_collector.html','','class_sysmon_collecto
 
 </div>
 </div>
-<a id="a31ae7e44a10811a1755549d0cd069754" name="a31ae7e44a10811a1755549d0cd069754"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a31ae7e44a10811a1755549d0cd069754">&#9670;&#160;</a></span>GetEventProperty()</h2>
+<a id="a0bfa96142a08518844ede9037adb5134" name="a0bfa96142a08518844ede9037adb5134"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0bfa96142a08518844ede9037adb5134">&#9670;&#160;</a></span>GetEventProperty()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -260,7 +244,7 @@ $(function(){initNavTree('class_sysmon_collector.html','','class_sysmon_collecto
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -278,8 +262,8 @@ $(function(){initNavTree('class_sysmon_collector.html','','class_sysmon_collecto
 
 </div>
 </div>
-<a id="a78bc59a4856767bb127f0aff50e3147c" name="a78bc59a4856767bb127f0aff50e3147c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a78bc59a4856767bb127f0aff50e3147c">&#9670;&#160;</a></span>GetEventPropertyInt()</h2>
+<a id="ab55030edf808a03cc04df83c751ee393" name="ab55030edf808a03cc04df83c751ee393"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab55030edf808a03cc04df83c751ee393">&#9670;&#160;</a></span>GetEventPropertyInt()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -300,7 +284,7 @@ $(function(){initNavTree('class_sysmon_collector.html','','class_sysmon_collecto
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -317,8 +301,8 @@ $(function(){initNavTree('class_sysmon_collector.html','','class_sysmon_collecto
 
 </div>
 </div>
-<a id="a72af115ca5e4fea06477684fdec02a84" name="a72af115ca5e4fea06477684fdec02a84"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a72af115ca5e4fea06477684fdec02a84">&#9670;&#160;</a></span>OnEventRecord()</h2>
+<a id="abd61374a22d672db56e49aa352fab324" name="abd61374a22d672db56e49aa352fab324"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abd61374a22d672db56e49aa352fab324">&#9670;&#160;</a></span>OnEventRecord()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -335,7 +319,7 @@ $(function(){initNavTree('class_sysmon_collector.html','','class_sysmon_collecto
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -350,8 +334,8 @@ $(function(){initNavTree('class_sysmon_collector.html','','class_sysmon_collecto
 
 </div>
 </div>
-<a id="ab0f68d4e1b28a4da6b6fb0a18adf4f80" name="ab0f68d4e1b28a4da6b6fb0a18adf4f80"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab0f68d4e1b28a4da6b6fb0a18adf4f80">&#9670;&#160;</a></span>ParseAndLog()</h2>
+<a id="a213457f8ac7e0a0a3691a89386605959" name="a213457f8ac7e0a0a3691a89386605959"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a213457f8ac7e0a0a3691a89386605959">&#9670;&#160;</a></span>ParseAndLog()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -372,7 +356,7 @@ $(function(){initNavTree('class_sysmon_collector.html','','class_sysmon_collecto
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -393,9 +377,6 @@ $(function(){initNavTree('class_sysmon_collector.html','','class_sysmon_collecto
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void SysmonCollector::Run </td>
@@ -404,11 +385,6 @@ $(function(){initNavTree('class_sysmon_collector.html','','class_sysmon_collecto
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>Запускает цикл обработки событий в реальном времени. </p>
@@ -434,7 +410,7 @@ $(function(){initNavTree('class_sysmon_collector.html','','class_sysmon_collecto
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel private">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -461,7 +437,7 @@ $(function(){initNavTree('class_sysmon_collector.html','','class_sysmon_collecto
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel private">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -488,7 +464,7 @@ $(function(){initNavTree('class_sysmon_collector.html','','class_sysmon_collecto
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel private">private</span></span>  </td>
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -594,8 +570,9 @@ $(function(){initNavTree('class_sysmon_collector.html','','class_sysmon_collecto
 
 </div>
 </div>
-<hr/>Объявления и описания членов класса находятся в файле:<ul>
+<hr/>Объявления и описания членов классов находятся в файлах:<ul>
 <li>Sysmon_analyzer/<a class="el" href="_sysmon_collector_8h_source.html">SysmonCollector.h</a></li>
+<li>Sysmon_analyzer/<a class="el" href="_sysmon_collector_8cpp.html">SysmonCollector.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
