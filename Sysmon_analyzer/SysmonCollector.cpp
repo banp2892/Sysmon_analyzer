@@ -4,29 +4,52 @@
 #pragma comment(lib, "tdh.lib")
 #pragma comment(lib, "advapi32.lib")
 
-SysmonCollector::SysmonCollector(const wchar_t* name, PreparationData* prep) : m_sessionName(name){
+SysmonCollector::SysmonCollector(const wchar_t* name, PreparationData* prep) : m_sessionName(name) {
     m_preparator = prep;
+    std::wcout << L"[DEBUG] Инициализация SysmonCollector для сессии: " << m_sessionName << std::endl;
+
     SetupProperties();
-    StopOldSession();
+
+    std::wcout << L"[DEBUG] Попытка остановки старой сессии (если была)... ";
+    StopOldSession(); // Код не проверяем, так как сессии может не быть
+    std::wcout << L"OK" << std::endl;
+
+    std::wcout << L"[DEBUG] Запуск новой ETW сессии... ";
     StartSession();
+    std::wcout << L"OK (Handle: " << m_sessionHandle << L")" << std::endl;
+
+    std::wcout << L"[DEBUG] Подключение провайдера Sysmon... ";
     EnableSysmon();
+    std::wcout << L"OK" << std::endl;
 }
 
 SysmonCollector::~SysmonCollector() {
     if (m_sessionHandle) {
+        std::wcout << L"[DEBUG] Завершение работы. Остановка сессии... ";
         ControlTraceW(m_sessionHandle, m_sessionName.c_str(), (PEVENT_TRACE_PROPERTIES)m_propsBuffer.data(), EVENT_TRACE_CONTROL_STOP);
+        std::wcout << L"Done." << std::endl;
     }
 }
 
 void SysmonCollector::Run() {
+    std::wcout << L"[DEBUG] Настройка лог-файла в реальном времени..." << std::endl;
     EVENT_TRACE_LOGFILEW logFile = { 0 };
     logFile.LoggerName = (LPWSTR)m_sessionName.c_str();
     logFile.ProcessTraceMode = PROCESS_TRACE_MODE_REAL_TIME | PROCESS_TRACE_MODE_EVENT_RECORD;
     logFile.EventRecordCallback = SysmonCollector::OnEventRecord;
 
     m_traceHandle = OpenTraceW(&logFile);
-    if (m_traceHandle != (TRACEHANDLE)INVALID_PROCESSTRACE_HANDLE) {
-        ProcessTrace(&m_traceHandle, 1, NULL, NULL);
+    if (m_traceHandle == (TRACEHANDLE)INVALID_PROCESSTRACE_HANDLE) {
+        std::wcerr << L"[ERROR] Не удалось открыть трассировку. Ошибка: " << GetLastError() << std::endl;
+        return;
+    }
+
+    std::wcout << L"[SYSTEM] Служба IDS запущена. Ожидание событий Sysmon..." << std::endl;
+    std::wcout << L"-------------------------------------------------------" << std::endl;
+
+    ULONG status = ProcessTrace(&m_traceHandle, 1, NULL, NULL);
+    if (status != ERROR_SUCCESS) {
+        std::wcerr << L"[ERROR] Ошибка в цикле обработки событий: " << status << std::endl;
     }
 }
 
@@ -46,22 +69,21 @@ void SysmonCollector::StopOldSession() {
 }
 
 void SysmonCollector::StartSession() {
-    StartTraceW(&m_sessionHandle, m_sessionName.c_str(), (PEVENT_TRACE_PROPERTIES)m_propsBuffer.data());
+    ULONG status = StartTraceW(&m_sessionHandle, m_sessionName.c_str(), (PEVENT_TRACE_PROPERTIES)m_propsBuffer.data());
+    if (status != ERROR_SUCCESS) {
+        std::wcerr << L"\n[FATAL] Не удалось запустить сессию ETW. Код: " << status << std::endl;
+        if (status == ERROR_ACCESS_DENIED) std::wcerr << L"СОВЕТ: Запусти Visual Studio от имени Администратора!" << std::endl;
+        exit(status);
+    }
 }
 
 void SysmonCollector::EnableSysmon() {
-    static const GUID sysmonGuid = { 0x5770385f, 0xc22a, 0x43e0, { 0xbf, 0x4c, 0x06, 0xf5, 0x69, 0x8f, 0xfb, 0xd9 } };
-    EnableTraceEx2(m_sessionHandle, &sysmonGuid, EVENT_CONTROL_CODE_ENABLE_PROVIDER, TRACE_LEVEL_INFORMATION, 0, 0, 0, NULL);
-}
-
-void WINAPI SysmonCollector::OnEventRecord(PEVENT_RECORD pEvent) {
-    DWORD size = 0;
-    if (TdhGetEventInformation(pEvent, 0, NULL, NULL, &size) == ERROR_INSUFFICIENT_BUFFER) {
-        std::vector<BYTE> info(size);
-        auto pInfo = (PTRACE_EVENT_INFO)info.data();
-        if (TdhGetEventInformation(pEvent, 0, NULL, pInfo, &size) == ERROR_SUCCESS) {
-            ParseAndLog(pEvent, pInfo);
-        }
+    // Microsoft-Windows-Sysmon {5770385F-C22A-43E0-BF4C-06F5698FFBD9}
+    static const GUID sysmonGuid =
+    { 0x5770385f, 0xc22a, 0x43e0, { 0xbf, 0x4c, 0x06, 0xf5, 0x69, 0x8f, 0xfb, 0xd9 } };
+    ULONG status = EnableTraceEx2(m_sessionHandle, &sysmonGuid, EVENT_CONTROL_CODE_ENABLE_PROVIDER, TRACE_LEVEL_INFORMATION, 0, 0, 0, NULL);
+    if (status != ERROR_SUCCESS) {
+        std::wcerr << L"\n[ERROR] Не удалось подключить Sysmon провайдер. Код: " << status << std::endl;
     }
 }
 
@@ -69,7 +91,7 @@ void SysmonCollector::ParseAndLog(PEVENT_RECORD pEvent, PTRACE_EVENT_INFO pInfo)
     USHORT eventId = pEvent->EventHeader.EventDescriptor.Id;
 
     switch (eventId) {
-    case 1: { // Процесс: Создание (Process Creation)
+    case 1: { // Процесс
         ProcessData pd;
         pd.imagePath = GetEventProperty(pEvent, pInfo, L"Image");
         pd.commandLine = GetEventProperty(pEvent, pInfo, L"CommandLine");
@@ -85,8 +107,7 @@ void SysmonCollector::ParseAndLog(PEVENT_RECORD pEvent, PTRACE_EVENT_INFO pInfo)
         break;
     }
 
-    case 3: { // Сеть: Сетевое соединение (Network Connection)
-
+    case 3: { // Сеть
         NetworkData nd;
         nd.imagePath = GetEventProperty(pEvent, pInfo, L"Image");
         nd.destIp = GetEventProperty(pEvent, pInfo, L"DestinationIp");
@@ -101,15 +122,6 @@ void SysmonCollector::ParseAndLog(PEVENT_RECORD pEvent, PTRACE_EVENT_INFO pInfo)
             << L":" << nd.destPort << std::endl;
         break;
     }
-
-    case 11: { // Файлы: Создание файла (File Create)
-
-        break;
-    }
-
-    default:
-
-        break;
     }
 }
 
@@ -128,4 +140,18 @@ DWORD SysmonCollector::GetEventPropertyInt(PEVENT_RECORD pEvent, const wchar_t* 
     DWORD val = 0;
     TdhGetProperty(pEvent, 0, NULL, 1, &desc, sizeof(DWORD), (PBYTE)&val);
     return val;
+}
+
+
+void WINAPI SysmonCollector::OnEventRecord(PEVENT_RECORD pEvent) {
+
+    std::wcout << L"!" << std::flush;
+    DWORD size = 0;
+    if (TdhGetEventInformation(pEvent, 0, NULL, NULL, &size) == ERROR_INSUFFICIENT_BUFFER) {
+        std::vector<BYTE> info(size);
+        auto pInfo = (PTRACE_EVENT_INFO)info.data();
+        if (TdhGetEventInformation(pEvent, 0, NULL, pInfo, &size) == ERROR_SUCCESS) {
+            ParseAndLog(pEvent, pInfo);
+        }
+    }
 }

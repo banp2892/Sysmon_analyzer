@@ -1,7 +1,7 @@
 
 #include <iostream>
 #include <vector>
-
+#include <clocale>
 
 
 #pragma comment(lib, "tdh.lib")
@@ -10,9 +10,9 @@
 #include "PreparationData.h"
 
 int main() {
+    setlocale(LC_ALL, "Russian");
     PreparationData preparator;
 
-    // Передаем адрес объекта (&preparator), так как конструктор ждет PreparationData*
     SysmonCollector collector(L"MySysmonSession", &preparator);
 
     collector.Run();
