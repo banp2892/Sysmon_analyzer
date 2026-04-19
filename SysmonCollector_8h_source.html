@@ -1,0 +1,173 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ru">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Sysmon_analyzer: Исходный файл Sysmon_analyzer/SysmonCollector.h</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">Sysmon_analyzer
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Создано системой Doxygen 1.9.8 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Поиск');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function() { init_codefold(0); });
+/* @license-end */
+</script>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(document).ready(function(){initNavTree('SysmonCollector_8h_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Загрузка...</div>
+<div class="SRStatus" id="Searching">Поиск...</div>
+<div class="SRStatus" id="NoMatches">Не найдено</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">SysmonCollector.h</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="SysmonCollector_8h.html">См. документацию.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#include &lt;windows.h&gt;</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &lt;evntrace.h&gt;</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;evntcons.h&gt;</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &lt;tdh.h&gt;</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &quot;<a class="code" href="PreparationData_8h.html">PreparationData.h</a>&quot;</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &quot;<a class="code" href="Structures_8h.html">Structures.h</a>&quot;</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
+<div class="foldopen" id="foldopen00017" data-start="{" data-end="};">
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno"><a class="line" href="classSysmonCollector.html">   17</a></span><span class="keyword">class </span><a class="code hl_class" href="classSysmonCollector.html">SysmonCollector</a> {</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno"><a class="line" href="classSysmonCollector.html#ace73b864ebc2d0d6b869d37b825c511c">   19</a></span>    TRACEHANDLE <a class="code hl_variable" href="classSysmonCollector.html#ace73b864ebc2d0d6b869d37b825c511c">m_sessionHandle</a> = 0; </div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno"><a class="line" href="classSysmonCollector.html#a667873b5bb03498f0781994d694e9184">   20</a></span>    TRACEHANDLE <a class="code hl_variable" href="classSysmonCollector.html#a667873b5bb03498f0781994d694e9184">m_traceHandle</a> = 0;   </div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno"><a class="line" href="classSysmonCollector.html#a431405b3f577d87fa1a841593eee8abd">   21</a></span>    std::wstring <a class="code hl_variable" href="classSysmonCollector.html#a431405b3f577d87fa1a841593eee8abd">m_sessionName</a>;      </div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno"><a class="line" href="classSysmonCollector.html#a284d8d8c2324587e48bc1df50a44dd5b">   22</a></span>    std::vector&lt;unsigned char&gt; <a class="code hl_variable" href="classSysmonCollector.html#a284d8d8c2324587e48bc1df50a44dd5b">m_propsBuffer</a>; </div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno"><a class="line" href="classSysmonCollector.html#a4bade727b290c7756f7f5c8ce4c3a7e5">   23</a></span>    <span class="keyword">static</span> <span class="keyword">inline</span> <a class="code hl_class" href="classPreparationData.html">PreparationData</a>* <a class="code hl_variable" href="classSysmonCollector.html#a4bade727b290c7756f7f5c8ce4c3a7e5">m_preparator</a> = <span class="keyword">nullptr</span>; </div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>    <a class="code hl_class" href="classSysmonCollector.html">SysmonCollector</a>(<span class="keyword">const</span> <span class="keywordtype">wchar_t</span>* name, <a class="code hl_class" href="classPreparationData.html">PreparationData</a>* prep);</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span> </div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>    <a class="code hl_function" href="classSysmonCollector.html#a05258cb410dd1d15eb00927ac206d279">~SysmonCollector</a>();</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span> </div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classSysmonCollector.html#a701b0f1201c54639c575354b791ce21e">Run</a>();</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span> </div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classSysmonCollector.html#a52f3277b390c2958fbd2cd11b6da714c">SetupProperties</a>();</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span> </div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classSysmonCollector.html#ad22b357f31d027e5359ded18e3a4092c">StopOldSession</a>();</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span> </div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classSysmonCollector.html#a66306c81794e9d28898ac1144591ab19">StartSession</a>();</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classSysmonCollector.html#aac014f74b7edad9639b3230901422f29">EnableSysmon</a>();</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span> </div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>    <span class="keyword">static</span> <span class="keywordtype">void</span> WINAPI <a class="code hl_function" href="classSysmonCollector.html#abd61374a22d672db56e49aa352fab324">OnEventRecord</a>(PEVENT_RECORD pEvent);</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span> </div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>    <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classSysmonCollector.html#a213457f8ac7e0a0a3691a89386605959">ParseAndLog</a>(PEVENT_RECORD pEvent, PTRACE_EVENT_INFO pInfo);</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span> </div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>    <span class="keyword">static</span> std::wstring <a class="code hl_function" href="classSysmonCollector.html#a0bfa96142a08518844ede9037adb5134">GetEventProperty</a>(PEVENT_RECORD pEvent, PTRACE_EVENT_INFO pInfo, <span class="keyword">const</span> <span class="keywordtype">wchar_t</span>* name);</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span> </div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>    <span class="keyword">static</span> DWORD <a class="code hl_function" href="classSysmonCollector.html#ab55030edf808a03cc04df83c751ee393">GetEventPropertyInt</a>(PEVENT_RECORD pEvent, <span class="keyword">const</span> <span class="keywordtype">wchar_t</span>* name);</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>};</div>
+</div>
+<div class="ttc" id="aPreparationData_8h_html"><div class="ttname"><a href="PreparationData_8h.html">PreparationData.h</a></div></div>
+<div class="ttc" id="aStructures_8h_html"><div class="ttname"><a href="Structures_8h.html">Structures.h</a></div></div>
+<div class="ttc" id="aclassPreparationData_html"><div class="ttname"><a href="classPreparationData.html">PreparationData</a></div><div class="ttdoc">Класс для обработки сырых данных Sysmon и вычисления дополнительных признаков.</div><div class="ttdef"><b>Definition</b> PreparationData.h:14</div></div>
+<div class="ttc" id="aclassSysmonCollector_html"><div class="ttname"><a href="classSysmonCollector.html">SysmonCollector</a></div><div class="ttdoc">Класс для управления сессией трассировки событий Windows (ETW) и сбора данных из Sysmon.</div><div class="ttdef"><b>Definition</b> SysmonCollector.h:17</div></div>
+<div class="ttc" id="aclassSysmonCollector_html_a05258cb410dd1d15eb00927ac206d279"><div class="ttname"><a href="classSysmonCollector.html#a05258cb410dd1d15eb00927ac206d279">SysmonCollector::~SysmonCollector</a></div><div class="ttdeci">~SysmonCollector()</div><div class="ttdoc">Деструктор: останавливает сессию трассировки и освобождает ресурсы.</div><div class="ttdef"><b>Definition</b> SysmonCollector.cpp:15</div></div>
+<div class="ttc" id="aclassSysmonCollector_html_a0bfa96142a08518844ede9037adb5134"><div class="ttname"><a href="classSysmonCollector.html#a0bfa96142a08518844ede9037adb5134">SysmonCollector::GetEventProperty</a></div><div class="ttdeci">static std::wstring GetEventProperty(PEVENT_RECORD pEvent, PTRACE_EVENT_INFO pInfo, const wchar_t *name)</div><div class="ttdoc">Извлекает строковое свойство из данных события.</div><div class="ttdef"><b>Definition</b> SysmonCollector.cpp:116</div></div>
+<div class="ttc" id="aclassSysmonCollector_html_a213457f8ac7e0a0a3691a89386605959"><div class="ttname"><a href="classSysmonCollector.html#a213457f8ac7e0a0a3691a89386605959">SysmonCollector::ParseAndLog</a></div><div class="ttdeci">static void ParseAndLog(PEVENT_RECORD pEvent, PTRACE_EVENT_INFO pInfo)</div><div class="ttdoc">Выполняет высокоуровневую фильтрацию и логирование событий на основе их Event ID.</div><div class="ttdef"><b>Definition</b> SysmonCollector.cpp:68</div></div>
+<div class="ttc" id="aclassSysmonCollector_html_a284d8d8c2324587e48bc1df50a44dd5b"><div class="ttname"><a href="classSysmonCollector.html#a284d8d8c2324587e48bc1df50a44dd5b">SysmonCollector::m_propsBuffer</a></div><div class="ttdeci">std::vector&lt; unsigned char &gt; m_propsBuffer</div><div class="ttdoc">Буфер для свойств сессии</div><div class="ttdef"><b>Definition</b> SysmonCollector.h:22</div></div>
+<div class="ttc" id="aclassSysmonCollector_html_a431405b3f577d87fa1a841593eee8abd"><div class="ttname"><a href="classSysmonCollector.html#a431405b3f577d87fa1a841593eee8abd">SysmonCollector::m_sessionName</a></div><div class="ttdeci">std::wstring m_sessionName</div><div class="ttdoc">Имя сессии трассировки</div><div class="ttdef"><b>Definition</b> SysmonCollector.h:21</div></div>
+<div class="ttc" id="aclassSysmonCollector_html_a4bade727b290c7756f7f5c8ce4c3a7e5"><div class="ttname"><a href="classSysmonCollector.html#a4bade727b290c7756f7f5c8ce4c3a7e5">SysmonCollector::m_preparator</a></div><div class="ttdeci">static PreparationData * m_preparator</div><div class="ttdoc">Указатель на обработчик данных</div><div class="ttdef"><b>Definition</b> SysmonCollector.h:23</div></div>
+<div class="ttc" id="aclassSysmonCollector_html_a52f3277b390c2958fbd2cd11b6da714c"><div class="ttname"><a href="classSysmonCollector.html#a52f3277b390c2958fbd2cd11b6da714c">SysmonCollector::SetupProperties</a></div><div class="ttdeci">void SetupProperties()</div><div class="ttdoc">Инициализирует структуру EVENT_TRACE_PROPERTIES в буфере.</div><div class="ttdef"><b>Definition</b> SysmonCollector.cpp:33</div></div>
+<div class="ttc" id="aclassSysmonCollector_html_a66306c81794e9d28898ac1144591ab19"><div class="ttname"><a href="classSysmonCollector.html#a66306c81794e9d28898ac1144591ab19">SysmonCollector::StartSession</a></div><div class="ttdeci">void StartSession()</div><div class="ttdoc">Регистрирует и запускает новую сессию трассировки в ядре Windows.</div><div class="ttdef"><b>Definition</b> SysmonCollector.cpp:48</div></div>
+<div class="ttc" id="aclassSysmonCollector_html_a667873b5bb03498f0781994d694e9184"><div class="ttname"><a href="classSysmonCollector.html#a667873b5bb03498f0781994d694e9184">SysmonCollector::m_traceHandle</a></div><div class="ttdeci">TRACEHANDLE m_traceHandle</div><div class="ttdoc">Хэндл открытого лога (потребителя)</div><div class="ttdef"><b>Definition</b> SysmonCollector.h:20</div></div>
+<div class="ttc" id="aclassSysmonCollector_html_a701b0f1201c54639c575354b791ce21e"><div class="ttname"><a href="classSysmonCollector.html#a701b0f1201c54639c575354b791ce21e">SysmonCollector::Run</a></div><div class="ttdeci">void Run()</div><div class="ttdoc">Запускает цикл обработки событий в реальном времени.</div><div class="ttdef"><b>Definition</b> SysmonCollector.cpp:21</div></div>
+<div class="ttc" id="aclassSysmonCollector_html_aac014f74b7edad9639b3230901422f29"><div class="ttname"><a href="classSysmonCollector.html#aac014f74b7edad9639b3230901422f29">SysmonCollector::EnableSysmon</a></div><div class="ttdeci">void EnableSysmon()</div><div class="ttdoc">Подключает провайдер Microsoft-Windows-Sysmon к созданной сессии.</div><div class="ttdef"><b>Definition</b> SysmonCollector.cpp:52</div></div>
+<div class="ttc" id="aclassSysmonCollector_html_ab55030edf808a03cc04df83c751ee393"><div class="ttname"><a href="classSysmonCollector.html#ab55030edf808a03cc04df83c751ee393">SysmonCollector::GetEventPropertyInt</a></div><div class="ttdeci">static DWORD GetEventPropertyInt(PEVENT_RECORD pEvent, const wchar_t *name)</div><div class="ttdoc">Извлекает целочисленное (DWORD) свойство из данных события.</div><div class="ttdef"><b>Definition</b> SysmonCollector.cpp:126</div></div>
+<div class="ttc" id="aclassSysmonCollector_html_abd61374a22d672db56e49aa352fab324"><div class="ttname"><a href="classSysmonCollector.html#abd61374a22d672db56e49aa352fab324">SysmonCollector::OnEventRecord</a></div><div class="ttdeci">static void WINAPI OnEventRecord(PEVENT_RECORD pEvent)</div><div class="ttdoc">Статический обратный вызов (Callback), вызываемый Windows при поступлении каждого события.</div><div class="ttdef"><b>Definition</b> SysmonCollector.cpp:57</div></div>
+<div class="ttc" id="aclassSysmonCollector_html_ace73b864ebc2d0d6b869d37b825c511c"><div class="ttname"><a href="classSysmonCollector.html#ace73b864ebc2d0d6b869d37b825c511c">SysmonCollector::m_sessionHandle</a></div><div class="ttdeci">TRACEHANDLE m_sessionHandle</div><div class="ttdoc">Хэндл сессии трассировки</div><div class="ttdef"><b>Definition</b> SysmonCollector.h:19</div></div>
+<div class="ttc" id="aclassSysmonCollector_html_ad22b357f31d027e5359ded18e3a4092c"><div class="ttname"><a href="classSysmonCollector.html#ad22b357f31d027e5359ded18e3a4092c">SysmonCollector::StopOldSession</a></div><div class="ttdeci">void StopOldSession()</div><div class="ttdoc">Останавливает существующую сессию с тем же именем, если она зависла в системе.</div><div class="ttdef"><b>Definition</b> SysmonCollector.cpp:44</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_9ad97d744f355a232af1b335b1330c0e.html">Sysmon_analyzer</a></li><li class="navelem"><a class="el" href="SysmonCollector_8h.html">SysmonCollector.h</a></li>
+    <li class="footer">Создано системой <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.8 </li>
+  </ul>
+</div>
+</body>
+</html>

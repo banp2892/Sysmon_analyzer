@@ -1,0 +1,5 @@
+<map id="SysmonCollector" name="SysmonCollector">
+<area shape="rect" id="Node000001" title="Класс для управления сессией трассировки событий Windows (ETW) и сбора данных из Sysmon." alt="" coords="5,93,137,119"/>
+<area shape="rect" id="Node000002" href="$classPreparationData.html" title="Класс для обработки сырых данных Sysmon и вычисления дополнительных признаков." alt="" coords="7,5,135,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="74,45,74,93,69,93,69,45"/>
+</map>
