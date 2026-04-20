@@ -1,6 +1,14 @@
 var searchData=
 [
-  ['destip_0',['destIp',['../structNetworkData.html#aec871e42a31671812329c0067c92e3a3',1,'NetworkData']]],
-  ['destport_1',['destPort',['../structNetworkData.html#a31f6fc05eed0a3e1c434be001d6944ff',1,'NetworkData']]],
-  ['detection_20system_20base_20on_20sysmon_20etw_2',['Windows IDS (Intrusion Detection System) base on Sysmon &amp; ETW',['../md_Readme.html',1,'']]]
+  ['calculateentropy_0',['CalculateEntropy',['../classPreparationData.html#ae5392d95a42f5d4a9aca7e2b1966f3d7',1,'PreparationData']]],
+  ['calltrace_1',['CallTrace',['../structID__10__SYSMONEVENT__ACCESS__PROCESS.html#af4c5ff6c72935744fb0331680f1aff54',1,'ID_10_SYSMONEVENT_ACCESS_PROCESS']]],
+  ['clientinfo_2',['ClientInfo',['../structID__24__SYSMONEVENT__CLIPBOARD.html#a10a51e6e868c147445424bba03e4c114',1,'ID_24_SYSMONEVENT_CLIPBOARD']]],
+  ['commandline_3',['CommandLine',['../structID__1__SYSMONEVENT__CREATE__PROCESS.html#a5ec247d2c48ad067a5e0e458ab1c3c46',1,'ID_1_SYSMONEVENT_CREATE_PROCESS']]],
+  ['company_4',['company',['../structID__1__SYSMONEVENT__CREATE__PROCESS.html#a985acd024043f74ee675847335cf4b5d',1,'ID_1_SYSMONEVENT_CREATE_PROCESS::Company'],['../structID__7__SYSMONEVENT__IMAGE__LOAD.html#a7fd19cb1882ad4ad229d179c2fc34f54',1,'ID_7_SYSMONEVENT_IMAGE_LOAD::Company']]],
+  ['configuration_5',['Configuration',['../structID__16__SYSMONEVENT__SERVICE__CONFIGURATION__CHANGE.html#a3cfba638b30d4c182bfc4ce077654083',1,'ID_16_SYSMONEVENT_SERVICE_CONFIGURATION_CHANGE']]],
+  ['configurationfilehash_6',['ConfigurationFileHash',['../structID__16__SYSMONEVENT__SERVICE__CONFIGURATION__CHANGE.html#a07df6eb537822656035ad6e1003cff33',1,'ID_16_SYSMONEVENT_SERVICE_CONFIGURATION_CHANGE']]],
+  ['consumer_7',['Consumer',['../structID__21__SYSMONEVENT__WMI__BINDING.html#a96f9f1d06587e3035a5ea3763ce37b52',1,'ID_21_SYSMONEVENT_WMI_BINDING']]],
+  ['contents_8',['Contents',['../structID__15__SYSMONEVENT__FILE__CREATE__STREAM__HASH.html#a6572ca9e03c473c218562cf05f9011a2',1,'ID_15_SYSMONEVENT_FILE_CREATE_STREAM_HASH']]],
+  ['creationutctime_9',['creationutctime',['../structID__2__SYSMONEVENT__FILE__TIME.html#af6c9f6e51f7786468b7b3e5235b14421',1,'ID_2_SYSMONEVENT_FILE_TIME::CreationUtcTime'],['../structID__11__SYSMONEVENT__FILE__CREATE.html#a479b2186ea1f0e69597e5df538e07334',1,'ID_11_SYSMONEVENT_FILE_CREATE::CreationUtcTime'],['../structID__15__SYSMONEVENT__FILE__CREATE__STREAM__HASH.html#a34d6ce3eb35cb1690735cc5353ffeb1b',1,'ID_15_SYSMONEVENT_FILE_CREATE_STREAM_HASH::CreationUtcTime']]],
+  ['currentdirectory_10',['CurrentDirectory',['../structID__1__SYSMONEVENT__CREATE__PROCESS.html#ad1738a26ed3a6a6dd9022b4f16462db0',1,'ID_1_SYSMONEVENT_CREATE_PROCESS']]]
 ];

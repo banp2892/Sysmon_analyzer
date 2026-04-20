@@ -156,6 +156,9 @@ $(document).ready(function(){initNavTree('classSysmonCollector.html',''); initRe
 <tr class="memitem:ab55030edf808a03cc04df83c751ee393" id="r_ab55030edf808a03cc04df83c751ee393"><td class="memItemLeft" align="right" valign="top">static DWORD&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSysmonCollector.html#ab55030edf808a03cc04df83c751ee393">GetEventPropertyInt</a> (PEVENT_RECORD pEvent, const wchar_t *name)</td></tr>
 <tr class="memdesc:ab55030edf808a03cc04df83c751ee393"><td class="mdescLeft">&#160;</td><td class="mdescRight">Извлекает целочисленное (DWORD) свойство из данных события.  <br /></td></tr>
 <tr class="separator:ab55030edf808a03cc04df83c751ee393"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4525e828a7becd03652642c43597a117" id="r_a4525e828a7becd03652642c43597a117"><td class="memItemLeft" align="right" valign="top">static std::wstring&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSysmonCollector.html#a4525e828a7becd03652642c43597a117">GetGuidProperty</a> (PEVENT_RECORD pEvent, const wchar_t *name)</td></tr>
+<tr class="memdesc:a4525e828a7becd03652642c43597a117"><td class="mdescLeft">&#160;</td><td class="mdescRight">Извлекает идентификатор GUID из события и преобразует его в строку.  <br /></td></tr>
+<tr class="separator:a4525e828a7becd03652642c43597a117"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Закрытые данные</h2></td></tr>
@@ -363,6 +366,56 @@ $(document).ready(function(){initNavTree('classSysmonCollector.html',''); initRe
   </dd>
 </dl>
 <dl class="section return"><dt>Возвращает</dt><dd>Числовое значение свойства. </dd></dl>
+
+</div>
+</div>
+<a id="a4525e828a7becd03652642c43597a117" name="a4525e828a7becd03652642c43597a117"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4525e828a7becd03652642c43597a117">&#9670;&#160;</a></span>GetGuidProperty()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::wstring SysmonCollector::GetGuidProperty </td>
+          <td>(</td>
+          <td class="paramtype">PEVENT_RECORD&#160;</td>
+          <td class="paramname"><em>pEvent</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const wchar_t *&#160;</td>
+          <td class="paramname"><em>name</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Извлекает идентификатор GUID из события и преобразует его в строку. </p>
+<ul>
+<li>Метод учитывает особенность Sysmon: GUID может передаваться как в виде сырой 128-битной структуры (16 байт), так и в виде заранее отформатированной Unicode-строки.</li>
+<li><dl class="params"><dt>Аргументы</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pEvent</td><td>Указатель на структуру события PEVENT_RECORD. </td></tr>
+    <tr><td class="paramname">name</td><td>Имя свойства в манифесте Sysmon (обычно L"ProcessGuid" или L"ParentProcessGuid"). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Возвращает</dt><dd>std::wstring Строковое представление GUID в формате {XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX}. Возвращает пустую строку, если свойство не найдено или возникла ошибка доступа. </dd></dl>
+</li>
+</ul>
 
 </div>
 </div>

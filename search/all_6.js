@@ -1,4 +1,10 @@
 var searchData=
 [
-  ['filedata_0',['FileData',['../structFileData.html',1,'']]]
+  ['enablesysmon_0',['EnableSysmon',['../classSysmonCollector.html#aac014f74b7edad9639b3230901422f29',1,'SysmonCollector']]],
+  ['entropy_1',['entropy',['../structID__1__SYSMONEVENT__CREATE__PROCESS.html#a0b24c23c741125d2bef2bec60c9d47a8',1,'ID_1_SYSMONEVENT_CREATE_PROCESS']]],
+  ['etw_2',['etw',['../md_Readme.html',1,'Windows IDS (Intrusion Detection System) base on Sysmon &amp; ETW'],['../md_Sysmon__analyzer_2Readme.html',1,'Windows IDS (Intrusion Detection System) base on Sysmon &amp; ETW']]],
+  ['eventdata_3',['eventData',['../structSysmonEvent.html#ad974d18daca4bbbc877152d15f6e6219',1,'SysmonEvent']]],
+  ['eventid_4',['eventId',['../structSysmonEvent.html#a0696bb420be9e0f009d5fe1a1df120e8',1,'SysmonEvent']]],
+  ['eventnamespace_5',['EventNamespace',['../structID__19__SYSMONEVENT__WMI__FILTER.html#a2b695ccfeb5b98b3463b6f8989efa539',1,'ID_19_SYSMONEVENT_WMI_FILTER']]],
+  ['eventtype_6',['eventtype',['../structID__12__SYSMONEVENT__REG__KEY.html#ae2ffbe126597717508c67895f8cce8bf',1,'ID_12_SYSMONEVENT_REG_KEY::EventType'],['../structID__13__SYSMONEVENT__REG__SETVALUE.html#a82f67c2c36364909c320be5ff3e6c65d',1,'ID_13_SYSMONEVENT_REG_SETVALUE::EventType'],['../structID__14__SYSMONEVENT__REG__NAME.html#a3d61007a8e23e41bc18149c6f715ee2f',1,'ID_14_SYSMONEVENT_REG_NAME::EventType'],['../structID__17__SYSMONEVENT__CREATE__NAMEDPIPE.html#a7132e52cca2cf47cc60e70f42e651442',1,'ID_17_SYSMONEVENT_CREATE_NAMEDPIPE::EventType'],['../structID__18__SYSMONEVENT__CONNECT__NAMEDPIPE.html#af4177dacec686217756acfc19e3a19c0',1,'ID_18_SYSMONEVENT_CONNECT_NAMEDPIPE::EventType'],['../structID__19__SYSMONEVENT__WMI__FILTER.html#ad91f46f6b7fcc3f66b64e521cfbeb5c8',1,'ID_19_SYSMONEVENT_WMI_FILTER::EventType'],['../structID__20__SYSMONEVENT__WMI__CONSUMER.html#a948232b88937de15934974916da86467',1,'ID_20_SYSMONEVENT_WMI_CONSUMER::EventType'],['../structID__21__SYSMONEVENT__WMI__BINDING.html#ab47521e904787f226121a50c6952ac73',1,'ID_21_SYSMONEVENT_WMI_BINDING::EventType']]]
 ];

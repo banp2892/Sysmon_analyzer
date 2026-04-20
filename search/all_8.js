@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['ids_20intrusion_20detection_20system_20base_20on_20sysmon_20etw_0',['Windows IDS (Intrusion Detection System) base on Sysmon &amp; ETW',['../md_Readme.html',1,'']]],
-  ['imagepath_1',['imagepath',['../structProcessData.html#ac4e78be1f9ec6e718ceae769bddb0374',1,'ProcessData::imagePath'],['../structNetworkData.html#a903016d4d17ba599b24c2d59bd834e8d',1,'NetworkData::imagePath'],['../structFileData.html#aa262d018ed8c91a738e84307a5551462',1,'FileData::imagePath']]],
-  ['intrusion_20detection_20system_20base_20on_20sysmon_20etw_2',['Windows IDS (Intrusion Detection System) base on Sysmon &amp; ETW',['../md_Readme.html',1,'']]]
+  ['geteventproperty_0',['GetEventProperty',['../classSysmonCollector.html#a0bfa96142a08518844ede9037adb5134',1,'SysmonCollector']]],
+  ['geteventpropertyint_1',['GetEventPropertyInt',['../classSysmonCollector.html#ab55030edf808a03cc04df83c751ee393',1,'SysmonCollector']]],
+  ['getguidproperty_2',['GetGuidProperty',['../classSysmonCollector.html#a4525e828a7becd03652642c43597a117',1,'SysmonCollector']]],
+  ['grantedaccess_3',['GrantedAccess',['../structID__10__SYSMONEVENT__ACCESS__PROCESS.html#a73cb97e398cfba8ad81a5605b88c533d',1,'ID_10_SYSMONEVENT_ACCESS_PROCESS']]]
 ];

@@ -1,8 +1,5 @@
 var searchData=
 [
-  ['m_5fpreparator_0',['m_preparator',['../classSysmonCollector.html#a4bade727b290c7756f7f5c8ce4c3a7e5',1,'SysmonCollector']]],
-  ['m_5fpropsbuffer_1',['m_propsBuffer',['../classSysmonCollector.html#a284d8d8c2324587e48bc1df50a44dd5b',1,'SysmonCollector']]],
-  ['m_5fsessionhandle_2',['m_sessionHandle',['../classSysmonCollector.html#ace73b864ebc2d0d6b869d37b825c511c',1,'SysmonCollector']]],
-  ['m_5fsessionname_3',['m_sessionName',['../classSysmonCollector.html#a431405b3f577d87fa1a841593eee8abd',1,'SysmonCollector']]],
-  ['m_5ftracehandle_4',['m_traceHandle',['../classSysmonCollector.html#a667873b5bb03498f0781994d694e9184',1,'SysmonCollector']]]
+  ['fileversion_0',['fileversion',['../structID__1__SYSMONEVENT__CREATE__PROCESS.html#afdbacc57d88b88f545ca96205bc8957a',1,'ID_1_SYSMONEVENT_CREATE_PROCESS::FileVersion'],['../structID__7__SYSMONEVENT__IMAGE__LOAD.html#a98e564b27eb43b27da9b70698193fce5',1,'ID_7_SYSMONEVENT_IMAGE_LOAD::FileVersion']]],
+  ['filter_1',['Filter',['../structID__21__SYSMONEVENT__WMI__BINDING.html#acab692017bdbb1f7b83612f5995fd99a',1,'ID_21_SYSMONEVENT_WMI_BINDING']]]
 ];

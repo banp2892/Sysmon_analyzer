@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['preparationdata_0',['PreparationData',['../classPreparationData.html',1,'']]],
-  ['processdata_1',['ProcessData',['../structProcessData.html',1,'']]]
+  ['sysmoncollector_0',['SysmonCollector',['../classSysmonCollector.html',1,'']]],
+  ['sysmonevent_1',['SysmonEvent',['../structSysmonEvent.html',1,'']]]
 ];

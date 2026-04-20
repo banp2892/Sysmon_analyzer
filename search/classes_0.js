@@ -1,4 +1,32 @@
 var searchData=
 [
-  ['filedata_0',['FileData',['../structFileData.html',1,'']]]
+  ['id_5f10_5fsysmonevent_5faccess_5fprocess_0',['ID_10_SYSMONEVENT_ACCESS_PROCESS',['../structID__10__SYSMONEVENT__ACCESS__PROCESS.html',1,'']]],
+  ['id_5f11_5fsysmonevent_5ffile_5fcreate_1',['ID_11_SYSMONEVENT_FILE_CREATE',['../structID__11__SYSMONEVENT__FILE__CREATE.html',1,'']]],
+  ['id_5f12_5fsysmonevent_5freg_5fkey_2',['ID_12_SYSMONEVENT_REG_KEY',['../structID__12__SYSMONEVENT__REG__KEY.html',1,'']]],
+  ['id_5f13_5fsysmonevent_5freg_5fsetvalue_3',['ID_13_SYSMONEVENT_REG_SETVALUE',['../structID__13__SYSMONEVENT__REG__SETVALUE.html',1,'']]],
+  ['id_5f14_5fsysmonevent_5freg_5fname_4',['ID_14_SYSMONEVENT_REG_NAME',['../structID__14__SYSMONEVENT__REG__NAME.html',1,'']]],
+  ['id_5f15_5fsysmonevent_5ffile_5fcreate_5fstream_5fhash_5',['ID_15_SYSMONEVENT_FILE_CREATE_STREAM_HASH',['../structID__15__SYSMONEVENT__FILE__CREATE__STREAM__HASH.html',1,'']]],
+  ['id_5f16_5fsysmonevent_5fservice_5fconfiguration_5fchange_6',['ID_16_SYSMONEVENT_SERVICE_CONFIGURATION_CHANGE',['../structID__16__SYSMONEVENT__SERVICE__CONFIGURATION__CHANGE.html',1,'']]],
+  ['id_5f17_5fsysmonevent_5fcreate_5fnamedpipe_7',['ID_17_SYSMONEVENT_CREATE_NAMEDPIPE',['../structID__17__SYSMONEVENT__CREATE__NAMEDPIPE.html',1,'']]],
+  ['id_5f18_5fsysmonevent_5fconnect_5fnamedpipe_8',['ID_18_SYSMONEVENT_CONNECT_NAMEDPIPE',['../structID__18__SYSMONEVENT__CONNECT__NAMEDPIPE.html',1,'']]],
+  ['id_5f19_5fsysmonevent_5fwmi_5ffilter_9',['ID_19_SYSMONEVENT_WMI_FILTER',['../structID__19__SYSMONEVENT__WMI__FILTER.html',1,'']]],
+  ['id_5f1_5fsysmonevent_5fcreate_5fprocess_10',['ID_1_SYSMONEVENT_CREATE_PROCESS',['../structID__1__SYSMONEVENT__CREATE__PROCESS.html',1,'']]],
+  ['id_5f20_5fsysmonevent_5fwmi_5fconsumer_11',['ID_20_SYSMONEVENT_WMI_CONSUMER',['../structID__20__SYSMONEVENT__WMI__CONSUMER.html',1,'']]],
+  ['id_5f21_5fsysmonevent_5fwmi_5fbinding_12',['ID_21_SYSMONEVENT_WMI_BINDING',['../structID__21__SYSMONEVENT__WMI__BINDING.html',1,'']]],
+  ['id_5f22_5fsysmonevent_5fdns_5fquery_13',['ID_22_SYSMONEVENT_DNS_QUERY',['../structID__22__SYSMONEVENT__DNS__QUERY.html',1,'']]],
+  ['id_5f23_5fsysmonevent_5ffile_5fdelete_14',['ID_23_SYSMONEVENT_FILE_DELETE',['../structID__23__SYSMONEVENT__FILE__DELETE.html',1,'']]],
+  ['id_5f24_5fsysmonevent_5fclipboard_15',['ID_24_SYSMONEVENT_CLIPBOARD',['../structID__24__SYSMONEVENT__CLIPBOARD.html',1,'']]],
+  ['id_5f25_5fsysmonevent_5fprocess_5fimage_5ftampering_16',['ID_25_SYSMONEVENT_PROCESS_IMAGE_TAMPERING',['../structID__25__SYSMONEVENT__PROCESS__IMAGE__TAMPERING.html',1,'']]],
+  ['id_5f26_5fsysmonevent_5ffile_5fdelete_5fdetected_17',['ID_26_SYSMONEVENT_FILE_DELETE_DETECTED',['../structID__26__SYSMONEVENT__FILE__DELETE__DETECTED.html',1,'']]],
+  ['id_5f27_5fsysmonevent_5ffile_5fblock_5fexe_18',['ID_27_SYSMONEVENT_FILE_BLOCK_EXE',['../structID__27__SYSMONEVENT__FILE__BLOCK__EXE.html',1,'']]],
+  ['id_5f28_5fsysmonevent_5ffile_5fblock_5fshredding_19',['ID_28_SYSMONEVENT_FILE_BLOCK_SHREDDING',['../structID__28__SYSMONEVENT__FILE__BLOCK__SHREDDING.html',1,'']]],
+  ['id_5f29_5fsysmonevent_5ffile_5fexe_5fdetected_20',['ID_29_SYSMONEVENT_FILE_EXE_DETECTED',['../structID__29__SYSMONEVENT__FILE__EXE__DETECTED.html',1,'']]],
+  ['id_5f2_5fsysmonevent_5ffile_5ftime_21',['ID_2_SYSMONEVENT_FILE_TIME',['../structID__2__SYSMONEVENT__FILE__TIME.html',1,'']]],
+  ['id_5f3_5fsysmonevent_5fnetwork_5fconnect_22',['ID_3_SYSMONEVENT_NETWORK_CONNECT',['../structID__3__SYSMONEVENT__NETWORK__CONNECT.html',1,'']]],
+  ['id_5f4_5fsysmonevent_5fservice_5fstate_5fchange_23',['ID_4_SYSMONEVENT_SERVICE_STATE_CHANGE',['../structID__4__SYSMONEVENT__SERVICE__STATE__CHANGE.html',1,'']]],
+  ['id_5f5_5fsysmonevent_5fprocess_5fterminate_24',['ID_5_SYSMONEVENT_PROCESS_TERMINATE',['../structID__5__SYSMONEVENT__PROCESS__TERMINATE.html',1,'']]],
+  ['id_5f6_5fsysmonevent_5fdriver_5fload_25',['ID_6_SYSMONEVENT_DRIVER_LOAD',['../structID__6__SYSMONEVENT__DRIVER__LOAD.html',1,'']]],
+  ['id_5f7_5fsysmonevent_5fimage_5fload_26',['ID_7_SYSMONEVENT_IMAGE_LOAD',['../structID__7__SYSMONEVENT__IMAGE__LOAD.html',1,'']]],
+  ['id_5f8_5fsysmonevent_5fcreate_5fremote_5fthread_27',['ID_8_SYSMONEVENT_CREATE_REMOTE_THREAD',['../structID__8__SYSMONEVENT__CREATE__REMOTE__THREAD.html',1,'']]],
+  ['id_5f9_5fsysmonevent_5frawaccess_5fread_28',['ID_9_SYSMONEVENT_RAWACCESS_READ',['../structID__9__SYSMONEVENT__RAWACCESS__READ.html',1,'']]]
 ];

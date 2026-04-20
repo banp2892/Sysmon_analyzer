@@ -26,13 +26,15 @@ var NAVTREE =
 [
   [ "Sysmon_analyzer", "index.html", [
     [ "Windows IDS (Intrusion Detection System) base on Sysmon & ETW", "md_Readme.html", null ],
+    [ "Windows IDS (Intrusion Detection System) base on Sysmon & ETW", "md_Sysmon__analyzer_2Readme.html", null ],
+    [ "Список задач", "todo.html", null ],
     [ "Классы", "annotated.html", [
       [ "Классы", "annotated.html", "annotated_dup" ],
       [ "Алфавитный указатель классов", "classes.html", null ],
       [ "Члены классов", "functions.html", [
-        [ "Указатель", "functions.html", null ],
+        [ "Указатель", "functions.html", "functions_dup" ],
         [ "Функции", "functions_func.html", null ],
-        [ "Переменные", "functions_vars.html", null ]
+        [ "Переменные", "functions_vars.html", "functions_vars" ]
       ] ]
     ] ],
     [ "Файлы", "files.html", [
@@ -47,7 +49,8 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"PreparationData_8cpp.html"
+"PreparationData_8cpp.html",
+"structID__24__SYSMONEVENT__CLIPBOARD.html#ad10db599a31aaaed1feff7cd482185a9"
 ];
 
 var SYNCONMSG = 'нажмите на выключить для синхронизации панелей';

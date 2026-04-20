@@ -1,9 +1,5 @@
 var searchData=
 [
-  ['m_5fpreparator_0',['m_preparator',['../classSysmonCollector.html#a4bade727b290c7756f7f5c8ce4c3a7e5',1,'SysmonCollector']]],
-  ['m_5fpropsbuffer_1',['m_propsBuffer',['../classSysmonCollector.html#a284d8d8c2324587e48bc1df50a44dd5b',1,'SysmonCollector']]],
-  ['m_5fsessionhandle_2',['m_sessionHandle',['../classSysmonCollector.html#ace73b864ebc2d0d6b869d37b825c511c',1,'SysmonCollector']]],
-  ['m_5fsessionname_3',['m_sessionName',['../classSysmonCollector.html#a431405b3f577d87fa1a841593eee8abd',1,'SysmonCollector']]],
-  ['m_5ftracehandle_4',['m_traceHandle',['../classSysmonCollector.html#a667873b5bb03498f0781994d694e9184',1,'SysmonCollector']]],
-  ['main_5',['main',['../Source_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4',1,'Source.cpp']]]
+  ['hash_0',['Hash',['../structID__15__SYSMONEVENT__FILE__CREATE__STREAM__HASH.html#ad7d9d1cf704105ad28914837ce30e6b7',1,'ID_15_SYSMONEVENT_FILE_CREATE_STREAM_HASH']]],
+  ['hashes_1',['hashes',['../structID__1__SYSMONEVENT__CREATE__PROCESS.html#a7bc4b8336906e8d09f375ae8f3b3b465',1,'ID_1_SYSMONEVENT_CREATE_PROCESS::Hashes'],['../structID__6__SYSMONEVENT__DRIVER__LOAD.html#a2852492303ac8f35dec83c07ecbb484d',1,'ID_6_SYSMONEVENT_DRIVER_LOAD::Hashes'],['../structID__7__SYSMONEVENT__IMAGE__LOAD.html#a5734c2cf8a7ad12c052b03ceb18c771c',1,'ID_7_SYSMONEVENT_IMAGE_LOAD::Hashes'],['../structID__23__SYSMONEVENT__FILE__DELETE.html#ab1f547c822c5bbef96683c7803a5ae35',1,'ID_23_SYSMONEVENT_FILE_DELETE::Hashes'],['../structID__24__SYSMONEVENT__CLIPBOARD.html#a97622d16139ba7d9921bf4f13a451db0',1,'ID_24_SYSMONEVENT_CLIPBOARD::Hashes'],['../structID__26__SYSMONEVENT__FILE__DELETE__DETECTED.html#a6b4ee39f1b8c1123a88658be7a375b5e',1,'ID_26_SYSMONEVENT_FILE_DELETE_DETECTED::Hashes'],['../structID__27__SYSMONEVENT__FILE__BLOCK__EXE.html#a2666e52c6c99bd01559095b28128066a',1,'ID_27_SYSMONEVENT_FILE_BLOCK_EXE::Hashes'],['../structID__28__SYSMONEVENT__FILE__BLOCK__SHREDDING.html#a2a072646458beb0c9dfb5085f0f57127',1,'ID_28_SYSMONEVENT_FILE_BLOCK_SHREDDING::Hashes'],['../structID__29__SYSMONEVENT__FILE__EXE__DETECTED.html#aaca81caf2f9374e0f4ad4f8e0564644c',1,'ID_29_SYSMONEVENT_FILE_EXE_DETECTED::Hashes']]]
 ];

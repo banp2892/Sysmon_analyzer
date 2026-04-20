@@ -96,7 +96,7 @@ $(document).ready(function(){initNavTree('structSysmonEvent.html',''); initResiz
 </div><!--header-->
 <div class="contents">
 
-<p>Универсальный транспортный контейнер.  
+<p>Универсальный транспортный контейнер для всех событий Sysmon.  
  <a href="structSysmonEvent.html#details">Подробнее...</a></p>
 
 <p><code>#include &lt;<a class="el" href="Structures_8h_source.html">Structures.h</a>&gt;</code></p>
@@ -104,31 +104,31 @@ $(document).ready(function(){initNavTree('structSysmonEvent.html',''); initResiz
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Открытые атрибуты</h2></td></tr>
 <tr class="memitem:ad173315ed4e2066ccd670566d9d6c410" id="r_ad173315ed4e2066ccd670566d9d6c410"><td class="memItemLeft" align="right" valign="top">long long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSysmonEvent.html#ad173315ed4e2066ccd670566d9d6c410">timestamp</a></td></tr>
-<tr class="memdesc:ad173315ed4e2066ccd670566d9d6c410"><td class="mdescLeft">&#160;</td><td class="mdescRight">Время события (из заголовка ETW)  <br /></td></tr>
+<tr class="memdesc:ad173315ed4e2066ccd670566d9d6c410"><td class="mdescLeft">&#160;</td><td class="mdescRight">Время события (из заголовка ETW/SystemTime)  <br /></td></tr>
 <tr class="separator:ad173315ed4e2066ccd670566d9d6c410"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0696bb420be9e0f009d5fe1a1df120e8" id="r_a0696bb420be9e0f009d5fe1a1df120e8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSysmonEvent.html#a0696bb420be9e0f009d5fe1a1df120e8">eventId</a></td></tr>
-<tr class="memdesc:a0696bb420be9e0f009d5fe1a1df120e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">ID события (1, 3, 11 и т.д.)  <br /></td></tr>
+<tr class="memdesc:a0696bb420be9e0f009d5fe1a1df120e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">ID события (1, 2, 3 ... 29)  <br /></td></tr>
 <tr class="separator:a0696bb420be9e0f009d5fe1a1df120e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9d1d801fb7b159e116214e3db04fe548" id="r_a9d1d801fb7b159e116214e3db04fe548"><td class="memItemLeft" align="right" valign="top">std::variant&lt; <a class="el" href="structProcessData.html">ProcessData</a>, <a class="el" href="structNetworkData.html">NetworkData</a>, <a class="el" href="structFileData.html">FileData</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSysmonEvent.html#a9d1d801fb7b159e116214e3db04fe548">eventData</a></td></tr>
-<tr class="separator:a9d1d801fb7b159e116214e3db04fe548"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad974d18daca4bbbc877152d15f6e6219" id="r_ad974d18daca4bbbc877152d15f6e6219"><td class="memItemLeft" align="right" valign="top">std::variant&lt; std::monostate, <a class="el" href="structID__1__SYSMONEVENT__CREATE__PROCESS.html">ID_1_SYSMONEVENT_CREATE_PROCESS</a>, <a class="el" href="structID__2__SYSMONEVENT__FILE__TIME.html">ID_2_SYSMONEVENT_FILE_TIME</a>, <a class="el" href="structID__3__SYSMONEVENT__NETWORK__CONNECT.html">ID_3_SYSMONEVENT_NETWORK_CONNECT</a>, <a class="el" href="structID__4__SYSMONEVENT__SERVICE__STATE__CHANGE.html">ID_4_SYSMONEVENT_SERVICE_STATE_CHANGE</a>, <a class="el" href="structID__5__SYSMONEVENT__PROCESS__TERMINATE.html">ID_5_SYSMONEVENT_PROCESS_TERMINATE</a>, <a class="el" href="structID__6__SYSMONEVENT__DRIVER__LOAD.html">ID_6_SYSMONEVENT_DRIVER_LOAD</a>, <a class="el" href="structID__7__SYSMONEVENT__IMAGE__LOAD.html">ID_7_SYSMONEVENT_IMAGE_LOAD</a>, <a class="el" href="structID__8__SYSMONEVENT__CREATE__REMOTE__THREAD.html">ID_8_SYSMONEVENT_CREATE_REMOTE_THREAD</a>, <a class="el" href="structID__9__SYSMONEVENT__RAWACCESS__READ.html">ID_9_SYSMONEVENT_RAWACCESS_READ</a>, <a class="el" href="structID__10__SYSMONEVENT__ACCESS__PROCESS.html">ID_10_SYSMONEVENT_ACCESS_PROCESS</a>, <a class="el" href="structID__11__SYSMONEVENT__FILE__CREATE.html">ID_11_SYSMONEVENT_FILE_CREATE</a>, <a class="el" href="structID__12__SYSMONEVENT__REG__KEY.html">ID_12_SYSMONEVENT_REG_KEY</a>, <a class="el" href="structID__13__SYSMONEVENT__REG__SETVALUE.html">ID_13_SYSMONEVENT_REG_SETVALUE</a>, <a class="el" href="structID__14__SYSMONEVENT__REG__NAME.html">ID_14_SYSMONEVENT_REG_NAME</a>, <a class="el" href="structID__15__SYSMONEVENT__FILE__CREATE__STREAM__HASH.html">ID_15_SYSMONEVENT_FILE_CREATE_STREAM_HASH</a>, <a class="el" href="structID__16__SYSMONEVENT__SERVICE__CONFIGURATION__CHANGE.html">ID_16_SYSMONEVENT_SERVICE_CONFIGURATION_CHANGE</a>, <a class="el" href="structID__17__SYSMONEVENT__CREATE__NAMEDPIPE.html">ID_17_SYSMONEVENT_CREATE_NAMEDPIPE</a>, <a class="el" href="structID__18__SYSMONEVENT__CONNECT__NAMEDPIPE.html">ID_18_SYSMONEVENT_CONNECT_NAMEDPIPE</a>, <a class="el" href="structID__19__SYSMONEVENT__WMI__FILTER.html">ID_19_SYSMONEVENT_WMI_FILTER</a>, <a class="el" href="structID__20__SYSMONEVENT__WMI__CONSUMER.html">ID_20_SYSMONEVENT_WMI_CONSUMER</a>, <a class="el" href="structID__21__SYSMONEVENT__WMI__BINDING.html">ID_21_SYSMONEVENT_WMI_BINDING</a>, <a class="el" href="structID__22__SYSMONEVENT__DNS__QUERY.html">ID_22_SYSMONEVENT_DNS_QUERY</a>, <a class="el" href="structID__23__SYSMONEVENT__FILE__DELETE.html">ID_23_SYSMONEVENT_FILE_DELETE</a>, <a class="el" href="structID__24__SYSMONEVENT__CLIPBOARD.html">ID_24_SYSMONEVENT_CLIPBOARD</a>, <a class="el" href="structID__25__SYSMONEVENT__PROCESS__IMAGE__TAMPERING.html">ID_25_SYSMONEVENT_PROCESS_IMAGE_TAMPERING</a>, <a class="el" href="structID__26__SYSMONEVENT__FILE__DELETE__DETECTED.html">ID_26_SYSMONEVENT_FILE_DELETE_DETECTED</a>, <a class="el" href="structID__27__SYSMONEVENT__FILE__BLOCK__EXE.html">ID_27_SYSMONEVENT_FILE_BLOCK_EXE</a>, <a class="el" href="structID__28__SYSMONEVENT__FILE__BLOCK__SHREDDING.html">ID_28_SYSMONEVENT_FILE_BLOCK_SHREDDING</a>, <a class="el" href="structID__29__SYSMONEVENT__FILE__EXE__DETECTED.html">ID_29_SYSMONEVENT_FILE_EXE_DETECTED</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSysmonEvent.html#ad974d18daca4bbbc877152d15f6e6219">eventData</a></td></tr>
+<tr class="memdesc:ad974d18daca4bbbc877152d15f6e6219"><td class="mdescLeft">&#160;</td><td class="mdescRight">Объединение всех возможных структур данных событий. variant гарантирует, что размер контейнера будет равен размеру самой большой структуры + индекс.  <br /></td></tr>
+<tr class="separator:ad974d18daca4bbbc877152d15f6e6219"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Подробное описание</h2>
-<div class="textblock"><p>Универсальный транспортный контейнер. </p>
-<ul>
-<li></li>
-</ul>
+<div class="textblock"><p>Универсальный транспортный контейнер для всех событий Sysmon. </p>
 </div><h2 class="groupheader">Данные класса</h2>
-<a id="a9d1d801fb7b159e116214e3db04fe548" name="a9d1d801fb7b159e116214e3db04fe548"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9d1d801fb7b159e116214e3db04fe548">&#9670;&#160;</a></span>eventData</h2>
+<a id="ad974d18daca4bbbc877152d15f6e6219" name="ad974d18daca4bbbc877152d15f6e6219"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad974d18daca4bbbc877152d15f6e6219">&#9670;&#160;</a></span>eventData</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::variant&lt;<a class="el" href="structProcessData.html">ProcessData</a>, <a class="el" href="structNetworkData.html">NetworkData</a>, <a class="el" href="structFileData.html">FileData</a>&gt; SysmonEvent::eventData</td>
+          <td class="memname">std::variant&lt; std::monostate, <a class="el" href="structID__1__SYSMONEVENT__CREATE__PROCESS.html">ID_1_SYSMONEVENT_CREATE_PROCESS</a>, <a class="el" href="structID__2__SYSMONEVENT__FILE__TIME.html">ID_2_SYSMONEVENT_FILE_TIME</a>, <a class="el" href="structID__3__SYSMONEVENT__NETWORK__CONNECT.html">ID_3_SYSMONEVENT_NETWORK_CONNECT</a>, <a class="el" href="structID__4__SYSMONEVENT__SERVICE__STATE__CHANGE.html">ID_4_SYSMONEVENT_SERVICE_STATE_CHANGE</a>, <a class="el" href="structID__5__SYSMONEVENT__PROCESS__TERMINATE.html">ID_5_SYSMONEVENT_PROCESS_TERMINATE</a>, <a class="el" href="structID__6__SYSMONEVENT__DRIVER__LOAD.html">ID_6_SYSMONEVENT_DRIVER_LOAD</a>, <a class="el" href="structID__7__SYSMONEVENT__IMAGE__LOAD.html">ID_7_SYSMONEVENT_IMAGE_LOAD</a>, <a class="el" href="structID__8__SYSMONEVENT__CREATE__REMOTE__THREAD.html">ID_8_SYSMONEVENT_CREATE_REMOTE_THREAD</a>, <a class="el" href="structID__9__SYSMONEVENT__RAWACCESS__READ.html">ID_9_SYSMONEVENT_RAWACCESS_READ</a>, <a class="el" href="structID__10__SYSMONEVENT__ACCESS__PROCESS.html">ID_10_SYSMONEVENT_ACCESS_PROCESS</a>, <a class="el" href="structID__11__SYSMONEVENT__FILE__CREATE.html">ID_11_SYSMONEVENT_FILE_CREATE</a>, <a class="el" href="structID__12__SYSMONEVENT__REG__KEY.html">ID_12_SYSMONEVENT_REG_KEY</a>, <a class="el" href="structID__13__SYSMONEVENT__REG__SETVALUE.html">ID_13_SYSMONEVENT_REG_SETVALUE</a>, <a class="el" href="structID__14__SYSMONEVENT__REG__NAME.html">ID_14_SYSMONEVENT_REG_NAME</a>, <a class="el" href="structID__15__SYSMONEVENT__FILE__CREATE__STREAM__HASH.html">ID_15_SYSMONEVENT_FILE_CREATE_STREAM_HASH</a>, <a class="el" href="structID__16__SYSMONEVENT__SERVICE__CONFIGURATION__CHANGE.html">ID_16_SYSMONEVENT_SERVICE_CONFIGURATION_CHANGE</a>, <a class="el" href="structID__17__SYSMONEVENT__CREATE__NAMEDPIPE.html">ID_17_SYSMONEVENT_CREATE_NAMEDPIPE</a>, <a class="el" href="structID__18__SYSMONEVENT__CONNECT__NAMEDPIPE.html">ID_18_SYSMONEVENT_CONNECT_NAMEDPIPE</a>, <a class="el" href="structID__19__SYSMONEVENT__WMI__FILTER.html">ID_19_SYSMONEVENT_WMI_FILTER</a>, <a class="el" href="structID__20__SYSMONEVENT__WMI__CONSUMER.html">ID_20_SYSMONEVENT_WMI_CONSUMER</a>, <a class="el" href="structID__21__SYSMONEVENT__WMI__BINDING.html">ID_21_SYSMONEVENT_WMI_BINDING</a>, <a class="el" href="structID__22__SYSMONEVENT__DNS__QUERY.html">ID_22_SYSMONEVENT_DNS_QUERY</a>, <a class="el" href="structID__23__SYSMONEVENT__FILE__DELETE.html">ID_23_SYSMONEVENT_FILE_DELETE</a>, <a class="el" href="structID__24__SYSMONEVENT__CLIPBOARD.html">ID_24_SYSMONEVENT_CLIPBOARD</a>, <a class="el" href="structID__25__SYSMONEVENT__PROCESS__IMAGE__TAMPERING.html">ID_25_SYSMONEVENT_PROCESS_IMAGE_TAMPERING</a>, <a class="el" href="structID__26__SYSMONEVENT__FILE__DELETE__DETECTED.html">ID_26_SYSMONEVENT_FILE_DELETE_DETECTED</a>, <a class="el" href="structID__27__SYSMONEVENT__FILE__BLOCK__EXE.html">ID_27_SYSMONEVENT_FILE_BLOCK_EXE</a>, <a class="el" href="structID__28__SYSMONEVENT__FILE__BLOCK__SHREDDING.html">ID_28_SYSMONEVENT_FILE_BLOCK_SHREDDING</a>, <a class="el" href="structID__29__SYSMONEVENT__FILE__EXE__DETECTED.html">ID_29_SYSMONEVENT_FILE_EXE_DETECTED</a> &gt; SysmonEvent::eventData</td>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Объединение всех возможных структур данных событий. variant гарантирует, что размер контейнера будет равен размеру самой большой структуры + индекс. </p>
 
 </div>
 </div>
@@ -144,7 +144,7 @@ $(document).ready(function(){initNavTree('structSysmonEvent.html',''); initResiz
       </table>
 </div><div class="memdoc">
 
-<p>ID события (1, 3, 11 и т.д.) </p>
+<p>ID события (1, 2, 3 ... 29) </p>
 
 </div>
 </div>
@@ -160,7 +160,7 @@ $(document).ready(function(){initNavTree('structSysmonEvent.html',''); initResiz
       </table>
 </div><div class="memdoc">
 
-<p>Время события (из заголовка ETW) </p>
+<p>Время события (из заголовка ETW/SystemTime) </p>
 
 </div>
 </div>
