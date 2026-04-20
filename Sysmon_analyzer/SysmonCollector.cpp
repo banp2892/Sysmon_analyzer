@@ -1,5 +1,6 @@
 #include "SysmonCollector.h"
 #include <iostream>
+#include <objbase.h>
 
 #pragma comment(lib, "tdh.lib")
 #pragma comment(lib, "advapi32.lib")
@@ -96,6 +97,7 @@ void SysmonCollector::ParseAndLog(PEVENT_RECORD pEvent, PTRACE_EVENT_INFO pInfo)
         pd.imagePath = GetEventProperty(pEvent, pInfo, L"Image");
         pd.commandLine = GetEventProperty(pEvent, pInfo, L"CommandLine");
         pd.processId = pEvent->EventHeader.ProcessId;
+        pd.processGuid = GetGuidProperty(pEvent, L"ProcessGuid");
 
         if (m_preparator) {
             m_preparator->PrepareProcess(pd);
@@ -103,7 +105,9 @@ void SysmonCollector::ParseAndLog(PEVENT_RECORD pEvent, PTRACE_EVENT_INFO pInfo)
 
         std::wcout << L"[PROC] ID: " << pd.processId
             << L" | Ent: " << pd.entropy
-            << L" | Path: " << pd.imagePath << std::endl;
+            << L" | Path: " << pd.imagePath
+            << L" ProcessGuid: " << pd.processGuid
+            << std::endl;
         break;
     }
 
@@ -112,6 +116,7 @@ void SysmonCollector::ParseAndLog(PEVENT_RECORD pEvent, PTRACE_EVENT_INFO pInfo)
         nd.imagePath = GetEventProperty(pEvent, pInfo, L"Image");
         nd.destIp = GetEventProperty(pEvent, pInfo, L"DestinationIp");
         nd.destPort = GetEventPropertyInt(pEvent, L"DestinationPort");
+        nd.processGuid = GetGuidProperty(pEvent, L"ProcessGuid");
 
         if (m_preparator) {
             m_preparator->PrepareNetwork(nd);
@@ -119,7 +124,9 @@ void SysmonCollector::ParseAndLog(PEVENT_RECORD pEvent, PTRACE_EVENT_INFO pInfo)
 
         std::wcout << L"[NET] " << nd.imagePath
             << L" -> " << nd.destIp
-            << L":" << nd.destPort << std::endl;
+            << L":" << nd.destPort 
+            << L" ProcessGuid: " << nd.processGuid 
+            << std::endl;
         break;
     }
     }
@@ -140,6 +147,33 @@ DWORD SysmonCollector::GetEventPropertyInt(PEVENT_RECORD pEvent, const wchar_t* 
     DWORD val = 0;
     TdhGetProperty(pEvent, 0, NULL, 1, &desc, sizeof(DWORD), (PBYTE)&val);
     return val;
+}
+
+std::wstring SysmonCollector::GetGuidProperty(PEVENT_RECORD pEvent, const wchar_t* name) {
+    PROPERTY_DATA_DESCRIPTOR desc = { (ULONGLONG)name, 0 };
+    DWORD size = 0;
+    // 1. Узнаем размер
+    if (TdhGetPropertySize(pEvent, 0, NULL, 1, &desc, &size) != ERROR_SUCCESS) {
+        return L"";
+    }
+    std::vector<BYTE> buf(size);
+    if (TdhGetProperty(pEvent, 0, NULL, 1, &desc, size, buf.data()) != ERROR_SUCCESS) {
+        return L"";
+    }
+    // 2. Если размер 16 байт — это бинарный GUID (структура)
+    if (size == sizeof(GUID)) {
+        GUID* g = (GUID*)buf.data();
+        wchar_t szGuid[40]; // Буфер для строки GUID
+        if (StringFromGUID2(*g, szGuid, ARRAYSIZE(szGuid)) != 0) {
+            return std::wstring(szGuid);
+        }
+    }
+    // 3. Если это уже строка (Unicode)
+    if (size >= sizeof(wchar_t)) {
+        // Указываем размер явно, чтобы не зависеть от нулевого терминатора
+        return std::wstring((wchar_t*)buf.data(), size / sizeof(wchar_t)).c_str();
+    }
+    return L"";
 }
 
 

@@ -7,6 +7,7 @@
  * @brief Данные события создания процесса (ID 1).
  */
 struct ProcessData {
+    std::wstring processGuid;  ///< Уникальный Id Sysmon
     std::wstring imagePath;    ///< Путь к исполняемому файлу
     std::wstring commandLine;  ///< Командная строка запуска
     double entropy;            ///< Вычисленная энтропия строки (заполнит PreparationData)
@@ -18,6 +19,7 @@ struct ProcessData {
  * @brief Данные сетевого события (ID 3).
  */
 struct NetworkData {
+    std::wstring processGuid;  ///< Уникальный Id Sysmon
     std::wstring imagePath;    ///< Путь к процессу, инициировавшему соединение
     std::wstring destIp;       ///< IP-адрес назначения
     DWORD destPort;            ///< Порт назначения

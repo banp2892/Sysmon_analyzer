@@ -90,4 +90,15 @@ private:
      * @return Числовое значение свойства.
      */
     static DWORD GetEventPropertyInt(PEVENT_RECORD pEvent, const wchar_t* name);
+    /**
+     * @brief Извлекает идентификатор GUID из события и преобразует его в строку.
+     * * Метод учитывает особенность Sysmon: GUID может передаваться как в виде
+     * сырой 128-битной структуры (16 байт), так и в виде заранее отформатированной
+     * Unicode-строки.
+     * * @param pEvent Указатель на структуру события PEVENT_RECORD.
+     * @param name Имя свойства в манифесте Sysmon (обычно L"ProcessGuid" или L"ParentProcessGuid").
+     * @return std::wstring Строковое представление GUID в формате {XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX}.
+     * Возвращает пустую строку, если свойство не найдено или возникла ошибка доступа.
+     */
+    static std::wstring GetGuidProperty(PEVENT_RECORD pEvent, const wchar_t* name);
 };
