@@ -2,6 +2,8 @@
 #include <iostream>
 #include <objbase.h>
 
+#include <iomanip>
+
 #pragma comment(lib, "tdh.lib")
 #pragma comment(lib, "advapi32.lib")
 
@@ -92,43 +94,75 @@ void SysmonCollector::ParseAndLog(PEVENT_RECORD pEvent, PTRACE_EVENT_INFO pInfo)
     USHORT eventId = pEvent->EventHeader.EventDescriptor.Id;
 
     switch (eventId) {
-    case 1: { // Процесс
-        ID_1_ProcessData pd;
-        pd.imagePath = GetEventProperty(pEvent, pInfo, L"Image");
-        pd.commandLine = GetEventProperty(pEvent, pInfo, L"CommandLine");
-        pd.processId = pEvent->EventHeader.ProcessId;
-        pd.processGuid = GetGuidProperty(pEvent, L"ProcessGuid");
+    case 1: { // Создание процесса
+        ID_1_SYSMONEVENT_CREATE_PROCESS pd;
+        pd.Image = GetEventProperty(pEvent, pInfo, L"Image");
+        pd.CommandLine = GetEventProperty(pEvent, pInfo, L"CommandLine");
+        pd.ProcessId = static_cast<DWORD>(GetEventPropertyInt(pEvent, L"ProcessId"));
+        pd.ProcessGuid = GetEventProperty(pEvent, pInfo, L"ProcessGuid");
+        pd.User = GetEventProperty(pEvent, pInfo, L"User");
 
-        if (m_preparator) {
-            m_preparator->PrepareProcess(pd);
-        }
+        if (m_preparator) m_preparator->PrepareProcess(pd);
 
-        std::wcout << L"[PROC] ID: " << pd.processId
-            << L" | Ent: " << pd.entropy
-            << L" | Path: " << pd.imagePath
-            << L" ProcessGuid: " << pd.processGuid
-            << std::endl;
+        std::wcout << L"[PROC] PID: " << pd.ProcessId << L" | Path: " << pd.Image << std::endl;
         break;
     }
 
-    case 3: { // Сеть
-        ID_3_NetworkData nd;
-        nd.imagePath = GetEventProperty(pEvent, pInfo, L"Image");
-        nd.destinationIp = GetEventProperty(pEvent, pInfo, L"DestinationIp");
-        nd.destinationPort = GetEventPropertyInt(pEvent, L"DestinationPort");
-        nd.processGuid = GetGuidProperty(pEvent, L"ProcessGuid");
+    case 3: { // Сетевое соединение
+        ID_3_SYSMONEVENT_NETWORK_CONNECT nd;
+        nd.Image = GetEventProperty(pEvent, pInfo, L"Image");
+        nd.DestinationIp = GetEventProperty(pEvent, pInfo, L"DestinationIp");
+        nd.DestinationPort = static_cast<DWORD>(GetEventPropertyInt(pEvent, L"DestinationPort"));
+        nd.Protocol = GetEventProperty(pEvent, pInfo, L"Protocol");
 
-        if (m_preparator) {
-            m_preparator->PrepareNetwork(nd);
-        }
-
-        std::wcout << L"[NET] " << nd.imagePath
-            << L" -> " << nd.destinationIp
-            << L":" << nd.destinationPort
-            << L" ProcessGuid: " << nd.processGuid 
-            << std::endl;
+        std::wcout << L"[NET] " << nd.Image << L" -> " << nd.DestinationIp << L":" << nd.DestinationPort << std::endl;
         break;
     }
+
+    case 7: { // Загрузка модуля (DLL) - Твой новый "спам"
+        ID_7_SYSMONEVENT_IMAGE_LOAD ild;
+        ild.Image = GetEventProperty(pEvent, pInfo, L"Image");
+        ild.ImageLoaded = GetEventProperty(pEvent, pInfo, L"ImageLoaded"); // Путь к DLL
+        ild.Signed = GetEventProperty(pEvent, pInfo, L"Signed");
+        ild.Signature = GetEventProperty(pEvent, pInfo, L"Signature");
+        ild.ProcessId = static_cast<DWORD>(GetEventPropertyInt(pEvent, L"ProcessId"));
+
+        std::wcout << L"[DLL] Proc: " << ild.Image << L" LOADED: " << ild.ImageLoaded
+            << L" [Signed: " << ild.Signed << L"]" << std::endl;
+        break;
+    }
+
+    case 10: { // Process Access
+        ID_10_SYSMONEVENT_ACCESS_PROCESS apd;
+        apd.SourceImage = GetEventProperty(pEvent, pInfo, L"SourceImage");
+        apd.TargetImage = GetEventProperty(pEvent, pInfo, L"TargetImage");
+
+        // ВНИМАНИЕ: Обязательно передаем аргументы!
+        apd.GrantedAccess = GetEventPropertyInt(pEvent, L"GrantedAccess");
+
+        std::wcout << L"!!!!!!!![ACCESS] Src: " << apd.SourceImage
+            << L" -> Tgt: " << apd.TargetImage
+            << L" | Access: 0x" << std::hex << std::setw(8) << std::setfill(L'0')
+            << apd.GrantedAccess << std::dec << std::endl;
+        break;
+    }
+
+    case 22: { // DNS Запрос
+        ID_22_SYSMONEVENT_DNS_QUERY dqd;
+        dqd.Image = GetEventProperty(pEvent, pInfo, L"Image");
+        dqd.QueryName = GetEventProperty(pEvent, pInfo, L"QueryName"); // Домен
+        dqd.QueryResults = GetEventProperty(pEvent, pInfo, L"QueryResults"); // IP адреса
+        dqd.ProcessId = static_cast<DWORD>(GetEventPropertyInt(pEvent, L"ProcessId"));
+
+        std::wcout << L"[DNS] " << dqd.Image << L" queried " << dqd.QueryName
+            << L" Result: " << dqd.QueryResults << std::endl;
+        break;
+    }
+
+    default:
+        // Для отладки остальных ID, которые мы пока не расписали
+        // std::wcout << L"[DEBUG] Unhandled Event ID: " << eventId << std::endl;
+        break;
     }
 }
 
@@ -144,8 +178,18 @@ std::wstring SysmonCollector::GetEventProperty(PEVENT_RECORD pEvent, PTRACE_EVEN
 
 DWORD SysmonCollector::GetEventPropertyInt(PEVENT_RECORD pEvent, const wchar_t* name) {
     PROPERTY_DATA_DESCRIPTOR desc = { (ULONGLONG)name, 0 };
+    DWORD size = 0;
+
+    // Проверка размера обязательна
+    if (TdhGetPropertySize(pEvent, 0, NULL, 1, &desc, &size) != ERROR_SUCCESS || size == 0) {
+        return 0;
+    }
+
     DWORD val = 0;
-    TdhGetProperty(pEvent, 0, NULL, 1, &desc, sizeof(DWORD), (PBYTE)&val);
+    // Напрямую читаем в DWORD. Если данных меньше 4 байт, val заполнится частично.
+    // Если больше — возьмем первые 4.
+    TdhGetProperty(pEvent, 0, NULL, 1, &desc, (size > 4) ? 4 : size, (PBYTE)&val);
+
     return val;
 }
 

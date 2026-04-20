@@ -17,13 +17,13 @@ public:
      * @brief Обрабатывает данные процесса (ID 1), вычисляя энтропию командной строки.
      * @param data Структура с первичными данными процесса.
      */
-    void PrepareProcess(ProcessData& data);
+    void PrepareProcess(ID_1_SYSMONEVENT_CREATE_PROCESS& data);
 
     /**
      * @brief Подготавливает данные сетевого события (ID 3).
      * @param data Структура с сетевыми данными.
      */
-    void PrepareNetwork(NetworkData& data);
+    void PrepareNetwork(ID_3_SYSMONEVENT_NETWORK_CONNECT& data);
 
     /**
      * @brief Универсальный метод расчета энтропии Шеннона для строки.

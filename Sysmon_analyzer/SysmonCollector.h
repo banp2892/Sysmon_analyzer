@@ -88,6 +88,7 @@ private:
      * @param pEvent «апись событи€.
      * @param name »м€ запрашиваемого свойства (напр. L"DestinationPort").
      * @return „исловое значение свойства.
+     * @todo переписать, должна работать с Access полем + надо переписать некоторые помеметки??
      */
     static DWORD GetEventPropertyInt(PEVENT_RECORD pEvent, const wchar_t* name);
     /**
@@ -100,5 +101,5 @@ private:
      * @return std::wstring —троковое представление GUID в формате {XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX}.
      * ¬озвращает пустую строку, если свойство не найдено или возникла ошибка доступа.
      */
-    static std::wstring GetGuidProperty(PEVENT_RECORD pEvent, const wchar_t* name);
+    std::wstring GetGuidProperty(PEVENT_RECORD pEvent, const wchar_t* name);
 };

@@ -32,7 +32,7 @@ struct ID_1_SYSMONEVENT_CREATE_PROCESS {
     std::wstring ParentCommandLine;  ///< [ParentCommandLine] Командная строка родителя
     std::wstring ParentUser;         ///< [ParentUser] Имя пользователя родительского процесса
 
-    // Твоя кастомная аналитика (не из XML манифеста)
+    // кастомная аналитика (не из XML манифеста)
     double entropy = 0.0;            ///< Вычисленная энтропия командной строки или образа
 };
 
@@ -210,20 +210,6 @@ struct ID_11_SYSMONEVENT_FILE_CREATE {
     std::wstring User;           ///< [User] Пользователь, создавший файл
 };
 
-/**
- * @struct ID_11_SYSMONEVENT_FILE_CREATE
- * @brief Данные о создании нового файла или перезаписи существующего (ID 11).
- */
-struct ID_11_SYSMONEVENT_FILE_CREATE {
-    std::wstring RuleName;       ///< [RuleName] Имя правила Sysmon
-    std::wstring UtcTime;        ///< [UtcTime] Время создания файла в формате UTC
-    std::wstring ProcessGuid;    ///< [ProcessGuid] GUID процесса, создавшего файл
-    DWORD ProcessId;             ///< [ProcessId] PID процесса, создавшего файл
-    std::wstring Image;          ///< [Image] Путь к исполняемому файлу процесса
-    std::wstring TargetFilename; ///< [TargetFilename] Полный путь к созданному файлу
-    std::wstring CreationUtcTime;///< [CreationUtcTime] Время создания файла (может отличаться от UtcTime события)
-    std::wstring User;           ///< [User] Пользователь, создавший файл
-};
 
 
 /**
