@@ -93,7 +93,7 @@ void SysmonCollector::ParseAndLog(PEVENT_RECORD pEvent, PTRACE_EVENT_INFO pInfo)
 
     switch (eventId) {
     case 1: { // Процесс
-        ProcessData pd;
+        ID_1_ProcessData pd;
         pd.imagePath = GetEventProperty(pEvent, pInfo, L"Image");
         pd.commandLine = GetEventProperty(pEvent, pInfo, L"CommandLine");
         pd.processId = pEvent->EventHeader.ProcessId;
@@ -112,10 +112,10 @@ void SysmonCollector::ParseAndLog(PEVENT_RECORD pEvent, PTRACE_EVENT_INFO pInfo)
     }
 
     case 3: { // Сеть
-        NetworkData nd;
+        ID_3_NetworkData nd;
         nd.imagePath = GetEventProperty(pEvent, pInfo, L"Image");
-        nd.destIp = GetEventProperty(pEvent, pInfo, L"DestinationIp");
-        nd.destPort = GetEventPropertyInt(pEvent, L"DestinationPort");
+        nd.destinationIp = GetEventProperty(pEvent, pInfo, L"DestinationIp");
+        nd.destinationPort = GetEventPropertyInt(pEvent, L"DestinationPort");
         nd.processGuid = GetGuidProperty(pEvent, L"ProcessGuid");
 
         if (m_preparator) {
@@ -123,8 +123,8 @@ void SysmonCollector::ParseAndLog(PEVENT_RECORD pEvent, PTRACE_EVENT_INFO pInfo)
         }
 
         std::wcout << L"[NET] " << nd.imagePath
-            << L" -> " << nd.destIp
-            << L":" << nd.destPort 
+            << L" -> " << nd.destinationIp
+            << L":" << nd.destinationPort
             << L" ProcessGuid: " << nd.processGuid 
             << std::endl;
         break;
