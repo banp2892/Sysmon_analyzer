@@ -9,33 +9,33 @@
 
 SysmonCollector::SysmonCollector(const wchar_t* name, PreparationData* prep) : m_sessionName(name) {
     m_preparator = prep;
-    std::wcout << L"[DEBUG] Инициализация SysmonCollector для сессии: " << m_sessionName << std::endl;
+    std::wcout << L"[DEBUG] РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ SysmonCollector РґР»СЏ СЃРµСЃСЃРёРё: " << m_sessionName << std::endl;
 
     SetupProperties();
 
-    std::wcout << L"[DEBUG] Попытка остановки старой сессии (если была)... ";
-    StopOldSession(); // Код не проверяем, так как сессии может не быть
+    std::wcout << L"[DEBUG] РџРѕРїС‹С‚РєР° РѕСЃС‚Р°РЅРѕРІРєРё СЃС‚Р°СЂРѕР№ СЃРµСЃСЃРёРё (РµСЃР»Рё Р±С‹Р»Р°)... ";
+    StopOldSession(); // РљРѕРґ РЅРµ РїСЂРѕРІРµСЂСЏРµРј, С‚Р°Рє РєР°Рє СЃРµСЃСЃРёРё РјРѕР¶РµС‚ РЅРµ Р±С‹С‚СЊ
     std::wcout << L"OK" << std::endl;
 
-    std::wcout << L"[DEBUG] Запуск новой ETW сессии... ";
+    std::wcout << L"[DEBUG] Р—Р°РїСѓСЃРє РЅРѕРІРѕР№ ETW СЃРµСЃСЃРёРё... ";
     StartSession();
     std::wcout << L"OK (Handle: " << m_sessionHandle << L")" << std::endl;
 
-    std::wcout << L"[DEBUG] Подключение провайдера Sysmon... ";
+    std::wcout << L"[DEBUG] РџРѕРґРєР»СЋС‡РµРЅРёРµ РїСЂРѕРІР°Р№РґРµСЂР° Sysmon... ";
     EnableSysmon();
     std::wcout << L"OK" << std::endl;
 }
 
 SysmonCollector::~SysmonCollector() {
     if (m_sessionHandle) {
-        std::wcout << L"[DEBUG] Завершение работы. Остановка сессии... ";
+        std::wcout << L"[DEBUG] Р—Р°РІРµСЂС€РµРЅРёРµ СЂР°Р±РѕС‚С‹. РћСЃС‚Р°РЅРѕРІРєР° СЃРµСЃСЃРёРё... ";
         ControlTraceW(m_sessionHandle, m_sessionName.c_str(), (PEVENT_TRACE_PROPERTIES)m_propsBuffer.data(), EVENT_TRACE_CONTROL_STOP);
         std::wcout << L"Done." << std::endl;
     }
 }
 
 void SysmonCollector::Run() {
-    std::wcout << L"[DEBUG] Настройка лог-файла в реальном времени..." << std::endl;
+    std::wcout << L"[DEBUG] РќР°СЃС‚СЂРѕР№РєР° Р»РѕРі-С„Р°Р№Р»Р° РІ СЂРµР°Р»СЊРЅРѕРј РІСЂРµРјРµРЅРё..." << std::endl;
     EVENT_TRACE_LOGFILEW logFile = { 0 };
     logFile.LoggerName = (LPWSTR)m_sessionName.c_str();
     logFile.ProcessTraceMode = PROCESS_TRACE_MODE_REAL_TIME | PROCESS_TRACE_MODE_EVENT_RECORD;
@@ -43,16 +43,16 @@ void SysmonCollector::Run() {
 
     m_traceHandle = OpenTraceW(&logFile);
     if (m_traceHandle == (TRACEHANDLE)INVALID_PROCESSTRACE_HANDLE) {
-        std::wcerr << L"[ERROR] Не удалось открыть трассировку. Ошибка: " << GetLastError() << std::endl;
+        std::wcerr << L"[ERROR] РќРµ СѓРґР°Р»РѕСЃСЊ РѕС‚РєСЂС‹С‚СЊ С‚СЂР°СЃСЃРёСЂРѕРІРєСѓ. РћС€РёР±РєР°: " << GetLastError() << std::endl;
         return;
     }
 
-    std::wcout << L"[SYSTEM] Служба IDS запущена. Ожидание событий Sysmon..." << std::endl;
+    std::wcout << L"[SYSTEM] РЎР»СѓР¶Р±Р° IDS Р·Р°РїСѓС‰РµРЅР°. РћР¶РёРґР°РЅРёРµ СЃРѕР±С‹С‚РёР№ Sysmon..." << std::endl;
     std::wcout << L"-------------------------------------------------------" << std::endl;
 
     ULONG status = ProcessTrace(&m_traceHandle, 1, NULL, NULL);
     if (status != ERROR_SUCCESS) {
-        std::wcerr << L"[ERROR] Ошибка в цикле обработки событий: " << status << std::endl;
+        std::wcerr << L"[ERROR] РћС€РёР±РєР° РІ С†РёРєР»Рµ РѕР±СЂР°Р±РѕС‚РєРё СЃРѕР±С‹С‚РёР№: " << status << std::endl;
     }
 }
 
@@ -74,8 +74,8 @@ void SysmonCollector::StopOldSession() {
 void SysmonCollector::StartSession() {
     ULONG status = StartTraceW(&m_sessionHandle, m_sessionName.c_str(), (PEVENT_TRACE_PROPERTIES)m_propsBuffer.data());
     if (status != ERROR_SUCCESS) {
-        std::wcerr << L"\n[FATAL] Не удалось запустить сессию ETW. Код: " << status << std::endl;
-        if (status == ERROR_ACCESS_DENIED) std::wcerr << L"СОВЕТ: Запусти Visual Studio от имени Администратора!" << std::endl;
+        std::wcerr << L"\n[FATAL] РќРµ СѓРґР°Р»РѕСЃСЊ Р·Р°РїСѓСЃС‚РёС‚СЊ СЃРµСЃСЃРёСЋ ETW. РљРѕРґ: " << status << std::endl;
+        if (status == ERROR_ACCESS_DENIED) std::wcerr << L"РЎРћР’Р•Рў: Р—Р°РїСѓСЃС‚Рё Visual Studio РѕС‚ РёРјРµРЅРё РђРґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂР°!" << std::endl;
         exit(status);
     }
 }
@@ -86,7 +86,7 @@ void SysmonCollector::EnableSysmon() {
     { 0x5770385f, 0xc22a, 0x43e0, { 0xbf, 0x4c, 0x06, 0xf5, 0x69, 0x8f, 0xfb, 0xd9 } };
     ULONG status = EnableTraceEx2(m_sessionHandle, &sysmonGuid, EVENT_CONTROL_CODE_ENABLE_PROVIDER, TRACE_LEVEL_INFORMATION, 0, 0, 0, NULL);
     if (status != ERROR_SUCCESS) {
-        std::wcerr << L"\n[ERROR] Не удалось подключить Sysmon провайдер. Код: " << status << std::endl;
+        std::wcerr << L"\n[ERROR] РќРµ СѓРґР°Р»РѕСЃСЊ РїРѕРґРєР»СЋС‡РёС‚СЊ Sysmon РїСЂРѕРІР°Р№РґРµСЂ. РљРѕРґ: " << status << std::endl;
     }
 }
 
@@ -94,7 +94,7 @@ void SysmonCollector::ParseAndLog(PEVENT_RECORD pEvent, PTRACE_EVENT_INFO pInfo)
     USHORT eventId = pEvent->EventHeader.EventDescriptor.Id;
 
     switch (eventId) {
-    case 1: { // Создание процесса
+    case 1: { // РЎРѕР·РґР°РЅРёРµ РїСЂРѕС†РµСЃСЃР°
         ID_1_SYSMONEVENT_CREATE_PROCESS pd;
         pd.Image = GetEventProperty(pEvent, pInfo, L"Image");
         pd.CommandLine = GetEventProperty(pEvent, pInfo, L"CommandLine");
@@ -108,7 +108,7 @@ void SysmonCollector::ParseAndLog(PEVENT_RECORD pEvent, PTRACE_EVENT_INFO pInfo)
         break;
     }
 
-    case 3: { // Сетевое соединение
+    case 3: { // РЎРµС‚РµРІРѕРµ СЃРѕРµРґРёРЅРµРЅРёРµ
         ID_3_SYSMONEVENT_NETWORK_CONNECT nd;
         nd.Image = GetEventProperty(pEvent, pInfo, L"Image");
         nd.DestinationIp = GetEventProperty(pEvent, pInfo, L"DestinationIp");
@@ -119,10 +119,10 @@ void SysmonCollector::ParseAndLog(PEVENT_RECORD pEvent, PTRACE_EVENT_INFO pInfo)
         break;
     }
 
-    case 7: { // Загрузка модуля (DLL) - Твой новый "спам"
+    case 7: { // Р—Р°РіСЂСѓР·РєР° РјРѕРґСѓР»СЏ (DLL) - РўРІРѕР№ РЅРѕРІС‹Р№ "СЃРїР°Рј"
         ID_7_SYSMONEVENT_IMAGE_LOAD ild;
         ild.Image = GetEventProperty(pEvent, pInfo, L"Image");
-        ild.ImageLoaded = GetEventProperty(pEvent, pInfo, L"ImageLoaded"); // Путь к DLL
+        ild.ImageLoaded = GetEventProperty(pEvent, pInfo, L"ImageLoaded"); // РџСѓС‚СЊ Рє DLL
         ild.Signed = GetEventProperty(pEvent, pInfo, L"Signed");
         ild.Signature = GetEventProperty(pEvent, pInfo, L"Signature");
         ild.ProcessId = static_cast<DWORD>(GetEventPropertyInt(pEvent, L"ProcessId"));
@@ -137,7 +137,7 @@ void SysmonCollector::ParseAndLog(PEVENT_RECORD pEvent, PTRACE_EVENT_INFO pInfo)
         apd.SourceImage = GetEventProperty(pEvent, pInfo, L"SourceImage");
         apd.TargetImage = GetEventProperty(pEvent, pInfo, L"TargetImage");
 
-        // ВНИМАНИЕ: Обязательно передаем аргументы!
+        // Р’РќРРњРђРќРР•: РћР±СЏР·Р°С‚РµР»СЊРЅРѕ РїРµСЂРµРґР°РµРј Р°СЂРіСѓРјРµРЅС‚С‹!
         apd.GrantedAccess = GetEventPropertyInt(pEvent, L"GrantedAccess");
 
         std::wcout << L"!!!!!!!![ACCESS] Src: " << apd.SourceImage
@@ -147,11 +147,11 @@ void SysmonCollector::ParseAndLog(PEVENT_RECORD pEvent, PTRACE_EVENT_INFO pInfo)
         break;
     }
 
-    case 22: { // DNS Запрос
+    case 22: { // DNS Р—Р°РїСЂРѕСЃ
         ID_22_SYSMONEVENT_DNS_QUERY dqd;
         dqd.Image = GetEventProperty(pEvent, pInfo, L"Image");
-        dqd.QueryName = GetEventProperty(pEvent, pInfo, L"QueryName"); // Домен
-        dqd.QueryResults = GetEventProperty(pEvent, pInfo, L"QueryResults"); // IP адреса
+        dqd.QueryName = GetEventProperty(pEvent, pInfo, L"QueryName"); // Р”РѕРјРµРЅ
+        dqd.QueryResults = GetEventProperty(pEvent, pInfo, L"QueryResults"); // IP Р°РґСЂРµСЃР°
         dqd.ProcessId = static_cast<DWORD>(GetEventPropertyInt(pEvent, L"ProcessId"));
 
         std::wcout << L"[DNS] " << dqd.Image << L" queried " << dqd.QueryName
@@ -160,7 +160,7 @@ void SysmonCollector::ParseAndLog(PEVENT_RECORD pEvent, PTRACE_EVENT_INFO pInfo)
     }
 
     default:
-        // Для отладки остальных ID, которые мы пока не расписали
+        // Р”Р»СЏ РѕС‚Р»Р°РґРєРё РѕСЃС‚Р°Р»СЊРЅС‹С… ID, РєРѕС‚РѕСЂС‹Рµ РјС‹ РїРѕРєР° РЅРµ СЂР°СЃРїРёСЃР°Р»Рё
         // std::wcout << L"[DEBUG] Unhandled Event ID: " << eventId << std::endl;
         break;
     }
@@ -180,14 +180,14 @@ DWORD SysmonCollector::GetEventPropertyInt(PEVENT_RECORD pEvent, const wchar_t* 
     PROPERTY_DATA_DESCRIPTOR desc = { (ULONGLONG)name, 0 };
     DWORD size = 0;
 
-    // Проверка размера обязательна
+    // РџСЂРѕРІРµСЂРєР° СЂР°Р·РјРµСЂР° РѕР±СЏР·Р°С‚РµР»СЊРЅР°
     if (TdhGetPropertySize(pEvent, 0, NULL, 1, &desc, &size) != ERROR_SUCCESS || size == 0) {
         return 0;
     }
 
     DWORD val = 0;
-    // Напрямую читаем в DWORD. Если данных меньше 4 байт, val заполнится частично.
-    // Если больше — возьмем первые 4.
+    // РќР°РїСЂСЏРјСѓСЋ С‡РёС‚Р°РµРј РІ DWORD. Р•СЃР»Рё РґР°РЅРЅС‹С… РјРµРЅСЊС€Рµ 4 Р±Р°Р№С‚, val Р·Р°РїРѕР»РЅРёС‚СЃСЏ С‡Р°СЃС‚РёС‡РЅРѕ.
+    // Р•СЃР»Рё Р±РѕР»СЊС€Рµ вЂ” РІРѕР·СЊРјРµРј РїРµСЂРІС‹Рµ 4.
     TdhGetProperty(pEvent, 0, NULL, 1, &desc, (size > 4) ? 4 : size, (PBYTE)&val);
 
     return val;
@@ -196,7 +196,7 @@ DWORD SysmonCollector::GetEventPropertyInt(PEVENT_RECORD pEvent, const wchar_t* 
 std::wstring SysmonCollector::GetGuidProperty(PEVENT_RECORD pEvent, const wchar_t* name) {
     PROPERTY_DATA_DESCRIPTOR desc = { (ULONGLONG)name, 0 };
     DWORD size = 0;
-    // 1. Узнаем размер
+    // 1. РЈР·РЅР°РµРј СЂР°Р·РјРµСЂ
     if (TdhGetPropertySize(pEvent, 0, NULL, 1, &desc, &size) != ERROR_SUCCESS) {
         return L"";
     }
@@ -204,17 +204,17 @@ std::wstring SysmonCollector::GetGuidProperty(PEVENT_RECORD pEvent, const wchar_
     if (TdhGetProperty(pEvent, 0, NULL, 1, &desc, size, buf.data()) != ERROR_SUCCESS) {
         return L"";
     }
-    // 2. Если размер 16 байт — это бинарный GUID (структура)
+    // 2. Р•СЃР»Рё СЂР°Р·РјРµСЂ 16 Р±Р°Р№С‚ вЂ” СЌС‚Рѕ Р±РёРЅР°СЂРЅС‹Р№ GUID (СЃС‚СЂСѓРєС‚СѓСЂР°)
     if (size == sizeof(GUID)) {
         GUID* g = (GUID*)buf.data();
-        wchar_t szGuid[40]; // Буфер для строки GUID
+        wchar_t szGuid[40]; // Р‘СѓС„РµСЂ РґР»СЏ СЃС‚СЂРѕРєРё GUID
         if (StringFromGUID2(*g, szGuid, ARRAYSIZE(szGuid)) != 0) {
             return std::wstring(szGuid);
         }
     }
-    // 3. Если это уже строка (Unicode)
+    // 3. Р•СЃР»Рё СЌС‚Рѕ СѓР¶Рµ СЃС‚СЂРѕРєР° (Unicode)
     if (size >= sizeof(wchar_t)) {
-        // Указываем размер явно, чтобы не зависеть от нулевого терминатора
+        // РЈРєР°Р·С‹РІР°РµРј СЂР°Р·РјРµСЂ СЏРІРЅРѕ, С‡С‚РѕР±С‹ РЅРµ Р·Р°РІРёСЃРµС‚СЊ РѕС‚ РЅСѓР»РµРІРѕРіРѕ С‚РµСЂРјРёРЅР°С‚РѕСЂР°
         return std::wstring((wchar_t*)buf.data(), size / sizeof(wchar_t)).c_str();
     }
     return L"";
