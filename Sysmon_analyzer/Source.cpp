@@ -19,6 +19,8 @@ int main() {
     setlocale(LC_ALL, "Russian");
     PreparationData preparator;
 
+
+
     SysmonCollector collector(L"MySysmonSession", &preparator);
 
     collector.Run();

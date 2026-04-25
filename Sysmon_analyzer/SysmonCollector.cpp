@@ -14,7 +14,7 @@ SysmonCollector::SysmonCollector(const wchar_t* name, PreparationData* prep) : m
     SetupProperties();
 
     std::wcout << L"[DEBUG] Попытка остановки старой сессии (если была)... ";
-    StopOldSession(); // Код не проверяем, так как сессии может не быть
+    StopOldSession();
     std::wcout << L"OK" << std::endl;
 
     std::wcout << L"[DEBUG] Запуск новой ETW сессии... ";
@@ -94,74 +94,187 @@ void SysmonCollector::ParseAndLog(PEVENT_RECORD pEvent, PTRACE_EVENT_INFO pInfo)
     USHORT eventId = pEvent->EventHeader.EventDescriptor.Id;
 
     switch (eventId) {
-    case 1: { // Создание процесса
+    case 1: { // Process Creation
         ID_1_SYSMONEVENT_CREATE_PROCESS pd;
+        pd.UtcTime = GetEventProperty(pEvent, pInfo, L"UtcTime");
         pd.Image = GetEventProperty(pEvent, pInfo, L"Image");
-        pd.CommandLine = GetEventProperty(pEvent, pInfo, L"CommandLine");
         pd.ProcessId = static_cast<DWORD>(GetEventPropertyInt(pEvent, L"ProcessId"));
-        pd.ProcessGuid = GetEventProperty(pEvent, pInfo, L"ProcessGuid");
         pd.User = GetEventProperty(pEvent, pInfo, L"User");
+        pd.CommandLine = GetEventProperty(pEvent, pInfo, L"CommandLine");
 
-        if (m_preparator) m_preparator->PrepareProcess(pd);
-
-        std::wcout << L"[PROC] PID: " << pd.ProcessId << L" | Path: " << pd.Image << std::endl;
+        std::wcout << L"[" << pd.UtcTime << L"] [ID: 1] [PROC_CREATE] PID: " << pd.ProcessId
+            << L" | User: " << pd.User << L" | Image: " << pd.Image << std::endl
+            << L"   > Cmd: " << pd.CommandLine << std::endl;
         break;
     }
 
-    case 3: { // Сетевое соединение
+    case 2: { // File Modification Time
+        ID_2_SYSMONEVENT_FILE_TIME fd;
+        fd.UtcTime = GetEventProperty(pEvent, pInfo, L"UtcTime");
+        fd.Image = GetEventProperty(pEvent, pInfo, L"Image");
+        fd.TargetFilename = GetEventProperty(pEvent, pInfo, L"TargetFilename");
+
+        std::wcout << L"[" << fd.UtcTime << L"] [ID: 2] [FILE_TIME] Proc: " << fd.Image
+            << L" changed time of: " << fd.TargetFilename << std::endl;
+        break;
+    }
+
+    case 3: { // Network Connection
         ID_3_SYSMONEVENT_NETWORK_CONNECT nd;
+        nd.UtcTime = GetEventProperty(pEvent, pInfo, L"UtcTime");
         nd.Image = GetEventProperty(pEvent, pInfo, L"Image");
         nd.DestinationIp = GetEventProperty(pEvent, pInfo, L"DestinationIp");
         nd.DestinationPort = static_cast<DWORD>(GetEventPropertyInt(pEvent, L"DestinationPort"));
         nd.Protocol = GetEventProperty(pEvent, pInfo, L"Protocol");
 
-        std::wcout << L"[NET] " << nd.Image << L" -> " << nd.DestinationIp << L":" << nd.DestinationPort << std::endl;
+        std::wcout << L"[" << nd.UtcTime << L"] [ID: 3] [NET] " << nd.Image
+            << L" -> " << nd.DestinationIp << L":" << nd.DestinationPort << L" (" << nd.Protocol << L")" << std::endl;
         break;
     }
 
-    case 7: { // Загрузка модуля (DLL) - Твой новый "спам"
-        ID_7_SYSMONEVENT_IMAGE_LOAD ild;
-        ild.Image = GetEventProperty(pEvent, pInfo, L"Image");
-        ild.ImageLoaded = GetEventProperty(pEvent, pInfo, L"ImageLoaded"); // Путь к DLL
-        ild.Signed = GetEventProperty(pEvent, pInfo, L"Signed");
-        ild.Signature = GetEventProperty(pEvent, pInfo, L"Signature");
-        ild.ProcessId = static_cast<DWORD>(GetEventPropertyInt(pEvent, L"ProcessId"));
+    case 5: { // Process Terminated
+        ID_5_SYSMONEVENT_PROCESS_TERMINATE td;
+        td.UtcTime = GetEventProperty(pEvent, pInfo, L"UtcTime");
+        td.Image = GetEventProperty(pEvent, pInfo, L"Image");
+        td.ProcessId = static_cast<DWORD>(GetEventPropertyInt(pEvent, L"ProcessId"));
 
-        std::wcout << L"[DLL] Proc: " << ild.Image << L" LOADED: " << ild.ImageLoaded
-            << L" [Signed: " << ild.Signed << L"]" << std::endl;
+        std::wcout << L"[" << td.UtcTime << L"] [ID: 5] [PROC_TERM] PID: " << td.ProcessId << L" Image: " << td.Image << std::endl;
+        break;
+    }
+
+    case 6: { // Driver Load
+        ID_6_SYSMONEVENT_DRIVER_LOAD drd;
+        drd.UtcTime = GetEventProperty(pEvent, pInfo, L"UtcTime");
+        drd.ImageLoaded = GetEventProperty(pEvent, pInfo, L"ImageLoaded");
+        drd.Signature = GetEventProperty(pEvent, pInfo, L"Signature");
+
+        std::wcout << L"[" << drd.UtcTime << L"] [ID: 6] [DRIVER] LOADED: " << drd.ImageLoaded
+            << L" | Sign: " << drd.Signature << std::endl;
+        break;
+    }
+
+    case 7: { // Image Load (DLL)
+        ID_7_SYSMONEVENT_IMAGE_LOAD ild;
+        ild.UtcTime = GetEventProperty(pEvent, pInfo, L"UtcTime");
+        ild.Image = GetEventProperty(pEvent, pInfo, L"Image");
+        ild.ImageLoaded = GetEventProperty(pEvent, pInfo, L"ImageLoaded");
+
+        std::wcout << L"[" << ild.UtcTime << L"] [ID: 7] [DLL_LOAD] Proc: " << ild.Image
+            << L" loaded " << ild.ImageLoaded << std::endl;
+        break;
+    }
+
+    case 8: { // Create Remote Thread
+        ID_8_SYSMONEVENT_CREATE_REMOTE_THREAD rtd;
+        rtd.UtcTime = GetEventProperty(pEvent, pInfo, L"UtcTime");
+        rtd.SourceImage = GetEventProperty(pEvent, pInfo, L"SourceImage");
+        rtd.TargetImage = GetEventProperty(pEvent, pInfo, L"TargetImage");
+        rtd.StartFunction = GetEventProperty(pEvent, pInfo, L"StartFunction");
+
+        std::wcout << L"[" << rtd.UtcTime << L"] [ID: 8] [REMOTE_THREAD] ALERT! Src: " << rtd.SourceImage
+            << L" -> Tgt: " << rtd.TargetImage << L" | Func: " << rtd.StartFunction << std::endl;
+        break;
+    }
+
+    case 9: { // Raw Access Read
+        ID_9_SYSMONEVENT_RAWACCESS_READ rad;
+        rad.UtcTime = GetEventProperty(pEvent, pInfo, L"UtcTime");
+        rad.Image = GetEventProperty(pEvent, pInfo, L"Image");
+        rad.Device = GetEventProperty(pEvent, pInfo, L"Device");
+
+        std::wcout << L"[" << rad.UtcTime << L"] [ID: 9] [RAW_READ] Proc: " << rad.Image << L" accessed " << rad.Device << std::endl;
         break;
     }
 
     case 10: { // Process Access
         ID_10_SYSMONEVENT_ACCESS_PROCESS apd;
+        apd.UtcTime = GetEventProperty(pEvent, pInfo, L"UtcTime");
         apd.SourceImage = GetEventProperty(pEvent, pInfo, L"SourceImage");
         apd.TargetImage = GetEventProperty(pEvent, pInfo, L"TargetImage");
+        apd.GrantedAccess = GetEventProperty(pEvent, pInfo, L"GrantedAccess");
 
-        // ВНИМАНИЕ: Обязательно передаем аргументы!
-        apd.GrantedAccess = GetEventPropertyInt(pEvent, L"GrantedAccess");
-
-        std::wcout << L"!!!!!!!![ACCESS] Src: " << apd.SourceImage
-            << L" -> Tgt: " << apd.TargetImage
-            << L" | Access: 0x" << std::hex << std::setw(8) << std::setfill(L'0')
-            << apd.GrantedAccess << std::dec << std::endl;
+        std::wcout << L"[" << apd.UtcTime << L"] [ID:10] [PROC_ACCESS] Src: " << apd.SourceImage
+            << L" -> Tgt: " << apd.TargetImage << L" | Mask: " << apd.GrantedAccess << std::endl;
         break;
     }
 
-    case 22: { // DNS Запрос
-        ID_22_SYSMONEVENT_DNS_QUERY dqd;
-        dqd.Image = GetEventProperty(pEvent, pInfo, L"Image");
-        dqd.QueryName = GetEventProperty(pEvent, pInfo, L"QueryName"); // Домен
-        dqd.QueryResults = GetEventProperty(pEvent, pInfo, L"QueryResults"); // IP адреса
-        dqd.ProcessId = static_cast<DWORD>(GetEventPropertyInt(pEvent, L"ProcessId"));
+    case 11: { // File Create
+        ID_11_SYSMONEVENT_FILE_CREATE fcd;
+        fcd.UtcTime = GetEventProperty(pEvent, pInfo, L"UtcTime");
+        fcd.Image = GetEventProperty(pEvent, pInfo, L"Image");
+        fcd.TargetFilename = GetEventProperty(pEvent, pInfo, L"TargetFilename");
 
-        std::wcout << L"[DNS] " << dqd.Image << L" queried " << dqd.QueryName
-            << L" Result: " << dqd.QueryResults << std::endl;
+        std::wcout << L"[" << fcd.UtcTime << L"] [ID:11] [FILE_CREATE] Proc: " << fcd.Image << L" created: " << fcd.TargetFilename << std::endl;
+        break;
+    }
+
+    case 12: case 13: case 14: { // Registry Events
+        std::wstring eType = GetEventProperty(pEvent, pInfo, L"EventType");
+        std::wstring utctime = GetEventProperty(pEvent, pInfo, L"UtcTime");
+        std::wstring img = GetEventProperty(pEvent, pInfo, L"Image");
+        std::wstring obj = GetEventProperty(pEvent, pInfo, L"TargetObject");
+
+        std::wcout << L"[" << utctime << L"] [ID:" << eventId << L"] [REGISTRY] " << eType
+            << L" | Proc: " << img << L" | Obj: " << obj << std::endl;
+        break;
+    }
+
+    case 17: case 18: { // Named Pipes
+        std::wstring pName = GetEventProperty(pEvent, pInfo, L"PipeName");
+        std::wstring utctime = GetEventProperty(pEvent, pInfo, L"UtcTime");
+        std::wstring img = GetEventProperty(pEvent, pInfo, L"Image");
+
+        std::wcout << L"[" << utctime << L"] [ID:" << eventId << L"] [PIPE] Proc: " << img
+            << (eventId == 17 ? L" CREATED pipe: " : L" CONNECTED to pipe: ") << pName << std::endl;
+        break;
+    }
+
+    case 22: { // DNS Query
+        ID_22_SYSMONEVENT_DNS_QUERY dqd;
+        dqd.UtcTime = GetEventProperty(pEvent, pInfo, L"UtcTime");
+        dqd.Image = GetEventProperty(pEvent, pInfo, L"Image");
+        dqd.QueryName = GetEventProperty(pEvent, pInfo, L"QueryName");
+        dqd.QueryResults = GetEventProperty(pEvent, pInfo, L"QueryResults");
+
+        std::wcout << L"[" << dqd.UtcTime << L"] [ID:22] [DNS] " << dqd.Image
+            << L" queried " << dqd.QueryName << L" -> " << dqd.QueryResults << std::endl;
+        break;
+    }
+
+    case 23: case 26: { // File Delete
+        std::wstring utctime = GetEventProperty(pEvent, pInfo, L"UtcTime");
+        std::wstring img = GetEventProperty(pEvent, pInfo, L"Image");
+        std::wstring target = GetEventProperty(pEvent, pInfo, L"TargetFilename");
+
+        std::wcout << L"[" << utctime << L"] [ID:" << eventId << L"] [FILE_DELETE] Proc: " << img << L" deleted: " << target << std::endl;
+        break;
+    }
+
+    case 25: { // Process Tampering
+        ID_25_SYSMONEVENT_PROCESS_IMAGE_TAMPERING ptd;
+        ptd.UtcTime = GetEventProperty(pEvent, pInfo, L"UtcTime");
+        ptd.Image = GetEventProperty(pEvent, pInfo, L"Image");
+        ptd.Type = GetEventProperty(pEvent, pInfo, L"Type");
+
+        std::wcout << L"[" << ptd.UtcTime << L"] [ID:25] [TAMPERING] ALERT! Proc: " << ptd.Image << L" Type: " << ptd.Type << std::endl;
+        break;
+    }
+
+    case 29: { // New Executable Detected
+        ID_29_SYSMONEVENT_FILE_EXE_DETECTED ed;
+        ed.UtcTime = GetEventProperty(pEvent, pInfo, L"UtcTime");
+        ed.Image = GetEventProperty(pEvent, pInfo, L"Image");
+        ed.TargetFilename = GetEventProperty(pEvent, pInfo, L"TargetFilename");
+
+        std::wcout << L"[" << ed.UtcTime << L"] [ID:29] [NEW_EXE] WARNING! Proc: " << ed.Image
+            << L" dropped EXE: " << ed.TargetFilename << std::endl;
         break;
     }
 
     default:
-        // Для отладки остальных ID, которые мы пока не расписали
-        // std::wcout << L"[DEBUG] Unhandled Event ID: " << eventId << std::endl;
+        // Для всех остальных ID (4, 15, 16, 19, 20, 21, 24, 27, 28)
+        // Выводим хотя бы факт события
+        std::wcout << L"[" << GetEventProperty(pEvent, pInfo, L"UtcTime") << L"] [ID:" << eventId << L"] Generic Event detected." << std::endl;
         break;
     }
 }
