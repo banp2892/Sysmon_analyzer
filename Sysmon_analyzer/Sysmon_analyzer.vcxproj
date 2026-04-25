@@ -137,6 +137,7 @@
     <ClCompile Include="SysmonCollector.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="PathNormalizer.h" />
     <ClInclude Include="ProcessTracker.h" />
     <ClInclude Include="Structures.h" />
     <ClInclude Include="SysmonCollector.h" />
