@@ -16,7 +16,7 @@ struct ProcessNode {
     long long FirstEventTime;
     long long LastEventTime;
 
-    std::vector<std::wstring> NamesForThisGUID;
+    std::vector<std::wstring> SequenceNamesForThisGUID;
     std::vector<UCHAR>SequenceID;
 };
 

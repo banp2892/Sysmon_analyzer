@@ -1,6 +1,18 @@
+#define _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING
+
 #include "ProcessTracker.h"
 #include <iomanip>
 #include <sstream>
+
+#include <fstream>
+#include <codecvt>
+#include <chrono>
+
+auto now = std::chrono::system_clock::now();
+auto duration = now.time_since_epoch();
+auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
+
+
 
 void ProcessTracker::LogProcessing(const SysmonEvent& NewLog)
 {
@@ -55,8 +67,13 @@ void ProcessTracker::UpdateProcessNode(std::wstring& currentGuid, SysmonEvent Ne
 
     std::wstring Image = std::visit(getImage, NewLog.eventData);
     if (Image != L"") {
-        if (_processes[currentGuid].NamesForThisGUID.back() != Image) {
-            _processes[currentGuid].NamesForThisGUID.push_back(Image); ///< добавл€ем им€ файла, который что-то сделал 
+        if (!_processes[currentGuid].SequenceNamesForThisGUID.empty()) {
+            if (_processes[currentGuid].SequenceNamesForThisGUID.back() != Image) {
+                _processes[currentGuid].SequenceNamesForThisGUID.push_back(Image); ///< добавл€ем им€ файла, который что-то сделал 
+            }
+        }
+        else {
+            _processes[currentGuid].SequenceNamesForThisGUID.push_back(Image);
         }
     }
 
@@ -70,10 +87,13 @@ void ProcessTracker::AddNewProcessNode(std::wstring& currentGuid, SysmonEvent Ne
 
     auto* Pid1 = std::get_if<ID_1_SYSMONEVENT_CREATE_PROCESS>(&NewLog.eventData); 
     if (Pid1) {
-        if (!_processes[currentGuid].NamesForThisGUID.empty()) {
-            if (_processes[currentGuid].NamesForThisGUID.back() != NormalizePathFunc(Pid1->Image)) {
-                _processes[currentGuid].NamesForThisGUID.push_back(NormalizePathFunc(Pid1->Image)); ///< если пришел айди 1, и им€ помен€лось, то мы запишем им€
+        if (!_processes[currentGuid].SequenceNamesForThisGUID.empty()) {
+            if (_processes[currentGuid].SequenceNamesForThisGUID.back() != NormalizePathFunc(Pid1->Image)) {
+                _processes[currentGuid].SequenceNamesForThisGUID.push_back(NormalizePathFunc(Pid1->Image)); ///< если пришел айди 1, и им€ помен€лось, то мы запишем им€
             }
+        }
+        else {
+            _processes[currentGuid].SequenceNamesForThisGUID.push_back(Pid1->Image);
         }
     }
 }
@@ -89,11 +109,12 @@ void ProcessTracker::ShowProcessesMonitor() {
         return;
     }
 
-    //system("cls");
-    std::wcout << L"==================== IDS PROCESS MONITOR ====================" << std::endl;
-    std::wcout << L" Total processes tracked: " << _processes.size() << std::endl;
-    std::wcout << L"------------------------------------------------------------" << std::endl;
+    system("cls");
     std::wstringstream ss;
+    ss << "==================== IDS PROCESS MONITOR ====================" << std::endl;
+    ss << " Total processes tracked: " << _processes.size() << std::endl;
+    ss << "------------------------------------------------------------" << std::endl;
+    
 
     for (const auto& [guid, node] : _processes) { ///< ƒл€ каждого процесса выводитс€ така€ табличка:
         ss<<"GUID: "<< guid << std::endl;
@@ -107,7 +128,11 @@ void ProcessTracker::ShowProcessesMonitor() {
         ss << std::endl;
 
 
-
+        ss << "Seq_Name: ";
+        for (auto ID_number : node.SequenceNamesForThisGUID) {
+            ss << ID_number << ", ";
+        }
+        ss << std::endl;
 
 
 
@@ -128,7 +153,21 @@ void ProcessTracker::ShowProcessesMonitor() {
 
 
     std::wstring OutputData = ss.str();
+
+
+    
+
+    std::wstring NameFile = L"Data_" + std::to_wstring(ms) + L".txt";
+    std::wofstream outfile(NameFile, std::ios::out | std::ios::trunc);
+
+    outfile.imbue(std::locale(std::locale::empty(), new std::codecvt_utf8<wchar_t>));
+
+    if (outfile.is_open()) {
+        outfile << OutputData;
+        outfile.close();
+    }
+
+
     std::wcout << OutputData;
-    // ѕ–»Ќ”ƒ»“≈Ћ№Ќќ выталкиваем данные в консоль
     std::wcout << std::flush;
 }
