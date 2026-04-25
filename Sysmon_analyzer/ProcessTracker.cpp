@@ -21,8 +21,8 @@ void ProcessTracker::LogProcessing(const SysmonEvent& NewLog)
         if constexpr (std::is_same_v<T, std::monostate>) {
             return L"";
         }
-        else if constexpr (requires { arg.ProcessGuid; }) {
-            return arg.ProcessGuid;
+        else if constexpr (requires { arg.Image; }) {
+            return arg.Image;
         }
         else if constexpr (requires { arg.SourceProcessGUID; }) {
             return arg.SourceProcessGUID;
@@ -53,47 +53,47 @@ void ProcessTracker::LogProcessing(const SysmonEvent& NewLog)
 
 }
 
-void ProcessTracker::UpdateProcessNode(std::wstring& currentGuid, SysmonEvent NewLog)
+void ProcessTracker::UpdateProcessNode(std::wstring& currentKey, SysmonEvent NewLog)
 {
-    _processes[currentGuid].SequenceID.push_back(NewLog.eventId); ///< ƒобавили в конец последовательности ID пришедшего лога
-    _processes[currentGuid].LastEventTime = NewLog.timestamp; ///< мен€ем врем€ последнего лога дл€ текущего процесса
+    _processes[currentKey].SequenceID.push_back(NewLog.eventId); ///< ƒобавили в конец последовательности ID пришедшего лога
+    _processes[currentKey].LastEventTime = NewLog.timestamp; ///< мен€ем врем€ последнего лога дл€ текущего процесса
 
-    auto getImage = [](auto&& arg)->std::wstring {
-        if constexpr (requires { arg.Image; }) {
-            return arg.Image;
+    auto getProcessGuid = [](auto&& arg)->std::wstring {
+        if constexpr (requires { arg.ProcessGuid; }) {
+            return arg.ProcessGuid;
         }
         return L"";
     };
 
-    std::wstring Image = std::visit(getImage, NewLog.eventData);
-    if (Image != L"") {
-        if (!_processes[currentGuid].SequenceNamesForThisGUID.empty()) {
-            if (_processes[currentGuid].SequenceNamesForThisGUID.back() != Image) {
-                _processes[currentGuid].SequenceNamesForThisGUID.push_back(Image); ///< добавл€ем им€ файла, который что-то сделал 
+    std::wstring ProcessGuid = std::visit(getProcessGuid, NewLog.eventData);
+    if (ProcessGuid != L"") {
+        if (!_processes[currentKey].SequenceNamesForThisKey.empty()) {
+            if (_processes[currentKey].SequenceNamesForThisKey.back() != ProcessGuid) {
+                _processes[currentKey].SequenceNamesForThisKey.push_back(ProcessGuid); ///< добавл€ем им€ файла, который что-то сделал 
             }
         }
         else {
-            _processes[currentGuid].SequenceNamesForThisGUID.push_back(Image);
+            _processes[currentKey].SequenceNamesForThisKey.push_back(ProcessGuid);
         }
     }
 
 }
 
-void ProcessTracker::AddNewProcessNode(std::wstring& currentGuid, SysmonEvent NewLog)
+void ProcessTracker::AddNewProcessNode(std::wstring& currentKey, SysmonEvent NewLog)
 {
-    _processes[currentGuid].SequenceID.push_back(NewLog.eventId); ///< ƒобавили в конец последовательности ID пришедшего лога
-    _processes[currentGuid].LastEventTime = NewLog.timestamp; ///< ”станавливаем врем€, когда открыли запись дл€ текущего процесса
-    _processes[currentGuid].FirstEventTime = NewLog.timestamp;///< мен€ем врем€ последнего лога дл€ текущего процесса
+    _processes[currentKey].SequenceID.push_back(NewLog.eventId); ///< ƒобавили в конец последовательности ID пришедшего лога
+    _processes[currentKey].LastEventTime = NewLog.timestamp; ///< ”станавливаем врем€, когда открыли запись дл€ текущего процесса
+    _processes[currentKey].FirstEventTime = NewLog.timestamp;///< мен€ем врем€ последнего лога дл€ текущего процесса
 
     auto* Pid1 = std::get_if<ID_1_SYSMONEVENT_CREATE_PROCESS>(&NewLog.eventData); 
     if (Pid1) {
-        if (!_processes[currentGuid].SequenceNamesForThisGUID.empty()) {
-            if (_processes[currentGuid].SequenceNamesForThisGUID.back() != NormalizePathFunc(Pid1->Image)) {
-                _processes[currentGuid].SequenceNamesForThisGUID.push_back(NormalizePathFunc(Pid1->Image)); ///< если пришел айди 1, и им€ помен€лось, то мы запишем им€
+        if (!_processes[currentKey].SequenceNamesForThisKey.empty()) {
+            if (_processes[currentKey].SequenceNamesForThisKey.back() != NormalizePathFunc(Pid1->ProcessGuid)) {
+                _processes[currentKey].SequenceNamesForThisKey.push_back(NormalizePathFunc(Pid1->ProcessGuid)); ///< если пришел айди 1, и им€ помен€лось, то мы запишем им€
             }
         }
         else {
-            _processes[currentGuid].SequenceNamesForThisGUID.push_back(Pid1->Image);
+            _processes[currentKey].SequenceNamesForThisKey.push_back(Pid1->ProcessGuid);
         }
     }
 }
@@ -116,8 +116,8 @@ void ProcessTracker::ShowProcessesMonitor() {
     ss << "------------------------------------------------------------" << std::endl;
     
 
-    for (const auto& [guid, node] : _processes) { ///< ƒл€ каждого процесса выводитс€ така€ табличка:
-        ss<<"GUID: "<< guid << std::endl;
+    for (const auto& [key, node] : _processes) { ///< ƒл€ каждого процесса выводитс€ така€ табличка:
+        ss<<"Key: "<< key << std::endl;
         ss << "First Time: " << node.FirstEventTime << std::endl;
         ss << "Last Time: " << node.LastEventTime << std::endl;
 
@@ -129,7 +129,7 @@ void ProcessTracker::ShowProcessesMonitor() {
 
 
         ss << "Seq_Name: ";
-        for (auto ID_number : node.SequenceNamesForThisGUID) {
+        for (auto ID_number : node.SequenceNamesForThisKey) {
             ss << ID_number << ", ";
         }
         ss << std::endl;

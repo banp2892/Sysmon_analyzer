@@ -1,3 +1,10 @@
+/**
+*@file ProcessTracker.h
+* @todo нужно добавить еще параметров
+* @todo скорее всего нужно будет использовать две нейронки, рекурсивную и дефолтную?? (почитать про это)
+* 
+*/
+
 #pragma once
 #include <windows.h>
 #include <string>
@@ -12,12 +19,18 @@
 #include "PathNormalizer.h"
 
 struct ProcessNode {
+    
 
-    long long FirstEventTime;
-    long long LastEventTime;
+    long long FirstEventTime; ///< [FirstEventTime] Время первого пришедшего лога
+    long long LastEventTime; ///< [LastEventTime] Время последнего пришедшего лога
 
-    std::vector<std::wstring> SequenceNamesForThisGUID;
-    std::vector<UCHAR>SequenceID;
+    std::wstring ParentProcessGuid;  ///< [ParentProcessGuid] GUID родительского процесса
+    DWORD ParentProcessId;           ///< [ParentProcessId] PID родительского процесса
+    std::wstring ParentImage;        ///< [ParentImage] Путь к исполняемому файлу родителя
+    std::vector<std::wstring> ChildrenGuids; ///< [ChildrenGuids] Список ключей к потомкам
+
+    std::vector<std::wstring> SequenceNamesForThisKey; ///< [SequenceNamesForThisKey] Последовательность Guid, от текущего ключа Key
+    std::vector<UCHAR>SequenceID;///< [SequenceID] Последовательность ID выполняемых Key
 };
 
 class ProcessTracker {
@@ -38,7 +51,7 @@ public:
         
 
 private:
-    std::map<std::wstring, ProcessNode> _processes;
+    std::map<std::wstring, ProcessNode> _processes; ///< wstring <-> key, в данном случае key это имя процесса
     std::mutex _dataMutex;
 
 

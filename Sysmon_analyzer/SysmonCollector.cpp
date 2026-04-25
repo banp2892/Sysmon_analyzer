@@ -719,7 +719,6 @@ DWORD SysmonCollector::GetEventPropertyInt(PEVENT_RECORD pEvent, const wchar_t* 
 std::wstring SysmonCollector::GetGuidProperty(PEVENT_RECORD pEvent, const wchar_t* name) {
     PROPERTY_DATA_DESCRIPTOR desc = { (ULONGLONG)name, 0 };
     DWORD size = 0;
-    // 1. Узнаем размер
     if (TdhGetPropertySize(pEvent, 0, NULL, 1, &desc, &size) != ERROR_SUCCESS) {
         return L"";
     }
@@ -727,7 +726,6 @@ std::wstring SysmonCollector::GetGuidProperty(PEVENT_RECORD pEvent, const wchar_
     if (TdhGetProperty(pEvent, 0, NULL, 1, &desc, size, buf.data()) != ERROR_SUCCESS) {
         return L"";
     }
-    // 2. Если размер 16 байт — это бинарный GUID (структура)
     if (size == sizeof(GUID)) {
         GUID* g = (GUID*)buf.data();
         wchar_t szGuid[40]; // Буфер для строки GUID
@@ -735,9 +733,7 @@ std::wstring SysmonCollector::GetGuidProperty(PEVENT_RECORD pEvent, const wchar_
             return std::wstring(szGuid);
         }
     }
-    // 3. Если это уже строка (Unicode)
     if (size >= sizeof(wchar_t)) {
-        // Указываем размер явно, чтобы не зависеть от нулевого терминатора
         return std::wstring((wchar_t*)buf.data(), size / sizeof(wchar_t)).c_str();
     }
     return L"";
