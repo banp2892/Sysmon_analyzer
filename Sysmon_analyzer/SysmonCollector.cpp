@@ -111,29 +111,24 @@ void SysmonCollector::ParseAndLog(PEVENT_RECORD pEvent, PTRACE_EVENT_INFO pInfo)
    case 1: { // Process Creation
         ID_1_SYSMONEVENT_CREATE_PROCESS pd;
         
-        // Извлекаем основные свойства
         pd.UtcTime = GetEventProperty(pEvent, pInfo, L"UtcTime");
         pd.Image = GetEventProperty(pEvent, pInfo, L"Image");
         pd.ProcessId = static_cast<DWORD>(GetEventPropertyInt(pEvent, L"ProcessId"));
         pd.User = GetEventProperty(pEvent, pInfo, L"User");
         pd.CommandLine = GetEventProperty(pEvent, pInfo, L"CommandLine");
-        
-        // КРИТИЧНО: Извлекаем GUID и ParentGuid для построения дерева процессов
+
         pd.ProcessGuid = GetGuidProperty(pEvent, L"ProcessGuid");
         pd.ParentProcessGuid = GetGuidProperty(pEvent, L"ParentProcessGuid");
         pd.ParentProcessId = static_cast<DWORD>(GetEventPropertyInt(pEvent, L"ParentProcessId"));
 
-        // Подготавливаем общий контейнер события
         SysmonEvent temp_SE;
         temp_SE.eventId = eventId;
         temp_SE.timestamp_wstring = pd.UtcTime;
         temp_SE.timestamp = UtcTimeToLong(pd.UtcTime);
-        
-        // Упаковываем структуру конкретного события в variant
+
         temp_SE.eventData = pd;
 
-        // Отправляем на обработку в трекер (через статическую переменную m_tracker)
-
+        myTracker.LogProcessing(temp_SE);
 
         /*std::wcout << L"[" << pd.UtcTime << L"] [ID: 1] [PROC_CREATE] PID: " << pd.ProcessId
              << L" | GUID: " << pd.ProcessGuid << std::endl
@@ -142,171 +137,277 @@ void SysmonCollector::ParseAndLog(PEVENT_RECORD pEvent, PTRACE_EVENT_INFO pInfo)
         break;
     }
 
-    case 2: { // File Modification Time
-        ID_2_SYSMONEVENT_FILE_TIME fd;
-        fd.UtcTime = GetEventProperty(pEvent, pInfo, L"UtcTime");
-        fd.Image = GetEventProperty(pEvent, pInfo, L"Image");
-        fd.TargetFilename = GetEventProperty(pEvent, pInfo, L"TargetFilename");
+   case 2: { // File Modification Time (Change of file creation time)
+       ID_2_SYSMONEVENT_FILE_TIME fd;
 
-        std::wcout << L"[" << fd.UtcTime << L"] [ID: 2] [FILE_TIME] Proc: " << fd.Image
-            << L" changed time of: " << fd.TargetFilename << std::endl;
-        break;
-    }
+       // Извлекаем свойства
+       fd.UtcTime = GetEventProperty(pEvent, pInfo, L"UtcTime");
+       fd.ProcessGuid = GetGuidProperty(pEvent, L"ProcessGuid");
+       fd.ProcessId = static_cast<DWORD>(GetEventPropertyInt(pEvent, L"ProcessId"));
+       fd.Image = GetEventProperty(pEvent, pInfo, L"Image");
+       fd.TargetFilename = GetEventProperty(pEvent, pInfo, L"TargetFilename");
+       fd.CreationUtcTime = GetEventProperty(pEvent, pInfo, L"CreationUtcTime");
+       fd.PreviousCreationUtcTime = GetEventProperty(pEvent, pInfo, L"PreviousCreationUtcTime");
 
-    case 3: { // Network Connection
-        ID_3_SYSMONEVENT_NETWORK_CONNECT nd;
-        nd.UtcTime = GetEventProperty(pEvent, pInfo, L"UtcTime");
-        nd.Image = GetEventProperty(pEvent, pInfo, L"Image");
-        nd.DestinationIp = GetEventProperty(pEvent, pInfo, L"DestinationIp");
-        nd.DestinationPort = static_cast<DWORD>(GetEventPropertyInt(pEvent, L"DestinationPort"));
-        nd.Protocol = GetEventProperty(pEvent, pInfo, L"Protocol");
+       // Подготавливаем контейнер
+       SysmonEvent temp_SE;
+       temp_SE.eventId = eventId;
+       temp_SE.timestamp_wstring = fd.UtcTime;
+       temp_SE.timestamp = UtcTimeToLong(fd.UtcTime);
+       temp_SE.eventData = fd;
 
-        std::wcout << L"[" << nd.UtcTime << L"] [ID: 3] [NET] " << nd.Image
-            << L" -> " << nd.DestinationIp << L":" << nd.DestinationPort << L" (" << nd.Protocol << L")" << std::endl;
-        break;
-    }
+       myTracker.LogProcessing(temp_SE);
+       break;
+   }
 
-    case 5: { // Process Terminated
-        ID_5_SYSMONEVENT_PROCESS_TERMINATE td;
-        td.UtcTime = GetEventProperty(pEvent, pInfo, L"UtcTime");
-        td.Image = GetEventProperty(pEvent, pInfo, L"Image");
-        td.ProcessId = static_cast<DWORD>(GetEventPropertyInt(pEvent, L"ProcessId"));
+   case 3: { // Network Connection
+       ID_3_SYSMONEVENT_NETWORK_CONNECT nd;
 
-        std::wcout << L"[" << td.UtcTime << L"] [ID: 5] [PROC_TERM] PID: " << td.ProcessId << L" Image: " << td.Image << std::endl;
-        break;
-    }
+       nd.UtcTime = GetEventProperty(pEvent, pInfo, L"UtcTime");
+       nd.ProcessGuid = GetGuidProperty(pEvent, L"ProcessGuid");
+       nd.ProcessId = static_cast<DWORD>(GetEventPropertyInt(pEvent, L"ProcessId"));
+       nd.Image = GetEventProperty(pEvent, pInfo, L"Image");
+       nd.User = GetEventProperty(pEvent, pInfo, L"User");
+       nd.Protocol = GetEventProperty(pEvent, pInfo, L"Protocol");
+       nd.Initiated = (GetEventProperty(pEvent, pInfo, L"Initiated") == L"true");
+       nd.SourceIsIpv6 = (GetEventProperty(pEvent, pInfo, L"SourceIsIpv6") == L"true");
+       nd.SourceIp = GetEventProperty(pEvent, pInfo, L"SourceIp");
+       nd.SourceHostname = GetEventProperty(pEvent, pInfo, L"SourceHostname");
+       nd.SourcePort = static_cast<DWORD>(GetEventPropertyInt(pEvent, L"SourcePort"));
+       nd.DestinationIp = GetEventProperty(pEvent, pInfo, L"DestinationIp");
+       nd.DestinationHostname = GetEventProperty(pEvent, pInfo, L"DestinationHostname");
+       nd.DestinationPort = static_cast<DWORD>(GetEventPropertyInt(pEvent, L"DestinationPort"));
+
+       SysmonEvent temp_SE;
+       temp_SE.eventId = eventId;
+       temp_SE.timestamp_wstring = nd.UtcTime;
+       temp_SE.timestamp = UtcTimeToLong(nd.UtcTime);
+       temp_SE.eventData = nd;
+
+       myTracker.LogProcessing(temp_SE);
+       break;
+   }
+
+   case 4: { // Sysmon Service State Change
+       ID_4_SYSMONEVENT_SERVICE_STATE_CHANGE sd;
+
+       // Извлекаем свойства
+       sd.UtcTime = GetEventProperty(pEvent, pInfo, L"UtcTime");
+       sd.State = GetEventProperty(pEvent, pInfo, L"State");
+       sd.Version = GetEventProperty(pEvent, pInfo, L"Version");
+       sd.SchemaVersion = GetEventProperty(pEvent, pInfo, L"SchemaVersion");
+
+       // Подготавливаем контейнер
+       SysmonEvent temp_SE;
+       temp_SE.eventId = eventId;
+       temp_SE.timestamp_wstring = sd.UtcTime;
+       temp_SE.timestamp = UtcTimeToLong(sd.UtcTime);
+       temp_SE.eventData = sd;
+
+       myTracker.LogProcessing(temp_SE);
+       break;
+   }
+
+   case 5: { // Process Terminated
+       ID_5_SYSMONEVENT_PROCESS_TERMINATE td;
+
+       // Извлекаем свойства
+       td.UtcTime = GetEventProperty(pEvent, pInfo, L"UtcTime");
+       td.ProcessGuid = GetGuidProperty(pEvent, L"ProcessGuid");
+       td.ProcessId = static_cast<DWORD>(GetEventPropertyInt(pEvent, L"ProcessId"));
+       td.Image = GetEventProperty(pEvent, pInfo, L"Image");
+
+       // Подготавливаем контейнер
+       SysmonEvent temp_SE;
+       temp_SE.eventId = eventId;
+       temp_SE.timestamp_wstring = td.UtcTime;
+       temp_SE.timestamp = UtcTimeToLong(td.UtcTime);
+       temp_SE.eventData = td;
+
+       // Отправляем в трекер (здесь должна быть логика удаления из активной мапы)
+       myTracker.LogProcessing(temp_SE);
+       break;
+   }
 
     case 6: { // Driver Load
         ID_6_SYSMONEVENT_DRIVER_LOAD drd;
+
+        // Извлекаем свойства
         drd.UtcTime = GetEventProperty(pEvent, pInfo, L"UtcTime");
         drd.ImageLoaded = GetEventProperty(pEvent, pInfo, L"ImageLoaded");
+        drd.Hashes = GetEventProperty(pEvent, pInfo, L"Hashes");
+        drd.Signed = (GetEventProperty(pEvent, pInfo, L"Signed") == L"true");
         drd.Signature = GetEventProperty(pEvent, pInfo, L"Signature");
+        drd.SignatureStatus = GetEventProperty(pEvent, pInfo, L"SignatureStatus");
 
-        std::wcout << L"[" << drd.UtcTime << L"] [ID: 6] [DRIVER] LOADED: " << drd.ImageLoaded
-            << L" | Sign: " << drd.Signature << std::endl;
+        // Подготавливаем контейнер
+        SysmonEvent temp_SE;
+        temp_SE.eventId = eventId;
+        temp_SE.timestamp_wstring = drd.UtcTime;
+        temp_SE.timestamp = UtcTimeToLong(drd.UtcTime);
+        temp_SE.eventData = drd;
+
+        myTracker.LogProcessing(temp_SE);
         break;
     }
-
-    case 7: { // Image Load (DLL)
+    case 7: { // Image Load (DLL Loaded)
         ID_7_SYSMONEVENT_IMAGE_LOAD ild;
+
         ild.UtcTime = GetEventProperty(pEvent, pInfo, L"UtcTime");
+        ild.ProcessGuid = GetGuidProperty(pEvent, L"ProcessGuid");
+        ild.ProcessId = static_cast<DWORD>(GetEventPropertyInt(pEvent, L"ProcessId"));
         ild.Image = GetEventProperty(pEvent, pInfo, L"Image");
         ild.ImageLoaded = GetEventProperty(pEvent, pInfo, L"ImageLoaded");
+        ild.FileVersion = GetEventProperty(pEvent, pInfo, L"FileVersion");
+        ild.Description = GetEventProperty(pEvent, pInfo, L"Description");
+        ild.Product = GetEventProperty(pEvent, pInfo, L"Product");
+        ild.Company = GetEventProperty(pEvent, pInfo, L"Company");
+        ild.Hashes = GetEventProperty(pEvent, pInfo, L"Hashes");
+        ild.Signed = (GetEventProperty(pEvent, pInfo, L"Signed") == L"true");
+        ild.Signature = GetEventProperty(pEvent, pInfo, L"Signature");
+        ild.SignatureStatus = GetEventProperty(pEvent, pInfo, L"SignatureStatus");
 
-        std::wcout << L"[" << ild.UtcTime << L"] [ID: 7] [DLL_LOAD] Proc: " << ild.Image
-            << L" loaded " << ild.ImageLoaded << std::endl;
+        SysmonEvent temp_SE;
+        temp_SE.eventId = eventId;
+        temp_SE.timestamp_wstring = ild.UtcTime;
+        temp_SE.timestamp = UtcTimeToLong(ild.UtcTime);
+        temp_SE.eventData = ild;
+
+        myTracker.LogProcessing(temp_SE);
         break;
     }
 
-    case 8: { // Create Remote Thread
+    case 8: { // Create Remote Thread (Часто инъекция кода)
         ID_8_SYSMONEVENT_CREATE_REMOTE_THREAD rtd;
+
         rtd.UtcTime = GetEventProperty(pEvent, pInfo, L"UtcTime");
+        rtd.SourceProcessGuid = GetGuidProperty(pEvent, L"SourceProcessGuid");
+        rtd.SourceProcessId = static_cast<DWORD>(GetEventPropertyInt(pEvent, L"SourceProcessId"));
         rtd.SourceImage = GetEventProperty(pEvent, pInfo, L"SourceImage");
+        rtd.TargetProcessGuid = GetGuidProperty(pEvent, L"TargetProcessGuid");
+        rtd.TargetProcessId = static_cast<DWORD>(GetEventPropertyInt(pEvent, L"TargetProcessId"));
         rtd.TargetImage = GetEventProperty(pEvent, pInfo, L"TargetImage");
+        rtd.NewThreadId = static_cast<DWORD>(GetEventPropertyInt(pEvent, L"NewThreadId"));
+        rtd.StartAddress = GetEventProperty(pEvent, pInfo, L"StartAddress");
+        rtd.StartModule = GetEventProperty(pEvent, pInfo, L"StartModule");
         rtd.StartFunction = GetEventProperty(pEvent, pInfo, L"StartFunction");
 
-        std::wcout << L"[" << rtd.UtcTime << L"] [ID: 8] [REMOTE_THREAD] ALERT! Src: " << rtd.SourceImage
-            << L" -> Tgt: " << rtd.TargetImage << L" | Func: " << rtd.StartFunction << std::endl;
+        SysmonEvent temp_SE;
+        temp_SE.eventId = eventId;
+        temp_SE.timestamp_wstring = rtd.UtcTime;
+        temp_SE.timestamp = UtcTimeToLong(rtd.UtcTime);
+        temp_SE.eventData = rtd;
+
+        myTracker.LogProcessing(temp_SE);
         break;
     }
 
-    case 9: { // Raw Access Read
+    case 9: { // Raw Access Read (Чтение диска в обход ФС, часто — дамперы памяти)
         ID_9_SYSMONEVENT_RAWACCESS_READ rad;
+
         rad.UtcTime = GetEventProperty(pEvent, pInfo, L"UtcTime");
+        rad.ProcessGuid = GetGuidProperty(pEvent, L"ProcessGuid");
+        rad.ProcessId = static_cast<DWORD>(GetEventPropertyInt(pEvent, L"ProcessId"));
         rad.Image = GetEventProperty(pEvent, pInfo, L"Image");
         rad.Device = GetEventProperty(pEvent, pInfo, L"Device");
 
-        std::wcout << L"[" << rad.UtcTime << L"] [ID: 9] [RAW_READ] Proc: " << rad.Image << L" accessed " << rad.Device << std::endl;
+        SysmonEvent temp_SE;
+        temp_SE.eventId = eventId;
+        temp_SE.timestamp_wstring = rad.UtcTime;
+        temp_SE.timestamp = UtcTimeToLong(rad.UtcTime);
+        temp_SE.eventData = rad;
+
+        myTracker.LogProcessing(temp_SE);
         break;
     }
 
-    case 10: { // Process Access
-        ID_10_SYSMONEVENT_ACCESS_PROCESS apd;
-        apd.UtcTime = GetEventProperty(pEvent, pInfo, L"UtcTime");
-        apd.SourceImage = GetEventProperty(pEvent, pInfo, L"SourceImage");
-        apd.TargetImage = GetEventProperty(pEvent, pInfo, L"TargetImage");
+    
 
-        // Используем твою новую функцию
-        DWORD accessMask = GetEventPropertyInt(pEvent, L"GrantedAccess");
+    case 10: { // Process Access (Handle opening)
+    ID_10_SYSMONEVENT_ACCESS_PROCESS apd;
 
-        std::wcout << L"[" << apd.UtcTime << L"] [ID:10] [PROC_ACCESS] "
-            << L"Src: " << (apd.SourceImage.empty() ? L"Unknown" : apd.SourceImage)
-            << L" -> Tgt: " << (apd.TargetImage.empty() ? L"Unknown" : apd.TargetImage)
-            << L" | Mask: 0x" << std::hex << std::setw(8) << std::setfill(L'0') << accessMask
-            << std::dec << std::endl;
-        break;
-    }
+    apd.RuleName = GetEventProperty(pEvent, pInfo, L"RuleName");
+    apd.UtcTime = GetEventProperty(pEvent, pInfo, L"UtcTime");
+    apd.SourceProcessGUID = GetGuidProperty(pEvent, L"SourceProcessGUID");
+    apd.SourceProcessId = static_cast<DWORD>(GetEventPropertyInt(pEvent, L"SourceProcessId"));
+    apd.SourceThreadId = static_cast<DWORD>(GetEventPropertyInt(pEvent, L"SourceThreadId"));
+    apd.SourceImage = GetEventProperty(pEvent, pInfo, L"SourceImage");
+    apd.TargetProcessGUID = GetGuidProperty(pEvent, L"TargetProcessGUID");
+    apd.TargetProcessId = static_cast<DWORD>(GetEventPropertyInt(pEvent, L"TargetProcessId"));
+    apd.TargetImage = GetEventProperty(pEvent, pInfo, L"TargetImage");
+    apd.GrantedAccess = GetEventProperty(pEvent, pInfo, L"GrantedAccess"); // Тут wstring
+    apd.CallTrace = GetEventProperty(pEvent, pInfo, L"CallTrace");
+    apd.SourceUser = GetEventProperty(pEvent, pInfo, L"SourceUser");
+    apd.TargetUser = GetEventProperty(pEvent, pInfo, L"TargetUser");
+
+    SysmonEvent temp_SE;
+    temp_SE.eventId = eventId;
+    temp_SE.timestamp_wstring = apd.UtcTime;
+    temp_SE.timestamp = UtcTimeToLong(apd.UtcTime);
+    temp_SE.eventData = apd;
+
+    myTracker.LogProcessing(temp_SE);
+    break;
+}
 
     case 11: { // File Create
         ID_11_SYSMONEVENT_FILE_CREATE fcd;
+
         fcd.UtcTime = GetEventProperty(pEvent, pInfo, L"UtcTime");
+        fcd.ProcessGuid = GetGuidProperty(pEvent, L"ProcessGuid");
+        fcd.ProcessId = static_cast<DWORD>(GetEventPropertyInt(pEvent, L"ProcessId"));
         fcd.Image = GetEventProperty(pEvent, pInfo, L"Image");
         fcd.TargetFilename = GetEventProperty(pEvent, pInfo, L"TargetFilename");
+        fcd.CreationUtcTime = GetEventProperty(pEvent, pInfo, L"CreationUtcTime");
 
-        std::wcout << L"[" << fcd.UtcTime << L"] [ID:11] [FILE_CREATE] Proc: " << fcd.Image << L" created: " << fcd.TargetFilename << std::endl;
+        SysmonEvent temp_SE;
+        temp_SE.eventId = eventId;
+        temp_SE.timestamp_wstring = fcd.UtcTime;
+        temp_SE.timestamp = UtcTimeToLong(fcd.UtcTime);
+        temp_SE.eventData = fcd;
+
+        myTracker.LogProcessing(temp_SE);
         break;
     }
 
-    case 12: case 13: case 14: { // Registry Events
-        std::wstring eType = GetEventProperty(pEvent, pInfo, L"EventType");
-        std::wstring utctime = GetEventProperty(pEvent, pInfo, L"UtcTime");
-        std::wstring img = GetEventProperty(pEvent, pInfo, L"Image");
-        std::wstring obj = GetEventProperty(pEvent, pInfo, L"TargetObject");
+    case 12: { // Registry Event (Object create and delete)
+        ID_12_SYSMONEVENT_REG_KEY rd;
 
-        std::wcout << L"[" << utctime << L"] [ID:" << eventId << L"] [REGISTRY] " << eType
-            << L" | Proc: " << img << L" | Obj: " << obj << std::endl;
+        rd.UtcTime = GetEventProperty(pEvent, pInfo, L"UtcTime");
+        rd.ProcessGuid = GetGuidProperty(pEvent, L"ProcessGuid");
+        rd.ProcessId = static_cast<DWORD>(GetEventPropertyInt(pEvent, L"ProcessId"));
+        rd.Image = GetEventProperty(pEvent, pInfo, L"Image");
+        rd.EventType = GetEventProperty(pEvent, pInfo, L"EventType");
+        rd.TargetObject = GetEventProperty(pEvent, pInfo, L"TargetObject");
+
+        SysmonEvent temp_SE;
+        temp_SE.eventId = eventId;
+        temp_SE.timestamp_wstring = rd.UtcTime;
+        temp_SE.timestamp = UtcTimeToLong(rd.UtcTime);
+        temp_SE.eventData = rd;
+
+        myTracker.LogProcessing(temp_SE);
         break;
     }
 
-    case 17: case 18: { // Named Pipes
-        std::wstring pName = GetEventProperty(pEvent, pInfo, L"PipeName");
-        std::wstring utctime = GetEventProperty(pEvent, pInfo, L"UtcTime");
-        std::wstring img = GetEventProperty(pEvent, pInfo, L"Image");
+    case 13: { // Registry Event (Value Set)
+        ID_13_SYSMONEVENT_REG_SETVALUE rd;
 
-        std::wcout << L"[" << utctime << L"] [ID:" << eventId << L"] [PIPE] Proc: " << img
-            << (eventId == 17 ? L" CREATED pipe: " : L" CONNECTED to pipe: ") << pName << std::endl;
-        break;
-    }
+        rd.UtcTime = GetEventProperty(pEvent, pInfo, L"UtcTime");
+        rd.ProcessGuid = GetGuidProperty(pEvent, L"ProcessGuid");
+        rd.ProcessId = static_cast<DWORD>(GetEventPropertyInt(pEvent, L"ProcessId"));
+        rd.Image = GetEventProperty(pEvent, pInfo, L"Image");
+        rd.EventType = GetEventProperty(pEvent, pInfo, L"EventType");
+        rd.TargetObject = GetEventProperty(pEvent, pInfo, L"TargetObject");
+        rd.Details = GetEventProperty(pEvent, pInfo, L"Details");
 
-    case 22: { // DNS Query
-        ID_22_SYSMONEVENT_DNS_QUERY dqd;
-        dqd.UtcTime = GetEventProperty(pEvent, pInfo, L"UtcTime");
-        dqd.Image = GetEventProperty(pEvent, pInfo, L"Image");
-        dqd.QueryName = GetEventProperty(pEvent, pInfo, L"QueryName");
-        dqd.QueryResults = GetEventProperty(pEvent, pInfo, L"QueryResults");
+        SysmonEvent temp_SE;
+        temp_SE.eventId = eventId;
+        temp_SE.timestamp_wstring = rd.UtcTime;
+        temp_SE.timestamp = UtcTimeToLong(rd.UtcTime);
+        temp_SE.eventData = rd;
 
-        std::wcout << L"[" << dqd.UtcTime << L"] [ID:22] [DNS] " << dqd.Image
-            << L" queried " << dqd.QueryName << L" -> " << dqd.QueryResults << std::endl;
-        break;
-    }
-
-    case 23: case 26: { // File Delete
-        std::wstring utctime = GetEventProperty(pEvent, pInfo, L"UtcTime");
-        std::wstring img = GetEventProperty(pEvent, pInfo, L"Image");
-        std::wstring target = GetEventProperty(pEvent, pInfo, L"TargetFilename");
-
-        std::wcout << L"[" << utctime << L"] [ID:" << eventId << L"] [FILE_DELETE] Proc: " << img << L" deleted: " << target << std::endl;
-        break;
-    }
-
-    case 25: { // Process Tampering
-        ID_25_SYSMONEVENT_PROCESS_IMAGE_TAMPERING ptd;
-        ptd.UtcTime = GetEventProperty(pEvent, pInfo, L"UtcTime");
-        ptd.Image = GetEventProperty(pEvent, pInfo, L"Image");
-        ptd.Type = GetEventProperty(pEvent, pInfo, L"Type");
-
-        std::wcout << L"[" << ptd.UtcTime << L"] [ID:25] [TAMPERING] ALERT! Proc: " << ptd.Image << L" Type: " << ptd.Type << std::endl;
-        break;
-    }
-
-    case 29: { // New Executable Detected
-        ID_29_SYSMONEVENT_FILE_EXE_DETECTED ed;
-        ed.UtcTime = GetEventProperty(pEvent, pInfo, L"UtcTime");
-        ed.Image = GetEventProperty(pEvent, pInfo, L"Image");
-        ed.TargetFilename = GetEventProperty(pEvent, pInfo, L"TargetFilename");
-
-        std::wcout << L"[" << ed.UtcTime << L"] [ID:29] [NEW_EXE] WARNING! Proc: " << ed.Image
-            << L" dropped EXE: " << ed.TargetFilename << std::endl;
+        myTracker.LogProcessing(temp_SE);
         break;
     }
 

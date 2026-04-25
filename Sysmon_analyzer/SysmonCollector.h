@@ -7,6 +7,7 @@
 #include <string>
 
 #include "Structures.h"
+#include "ProcessTracker.h"
 
 /**
  * @class SysmonCollector
@@ -20,6 +21,7 @@ private:
     TRACEHANDLE m_traceHandle = 0;   ///< Хэндл открытого лога (потребителя)
     std::wstring m_sessionName;      ///< Имя сессии трассировки
     std::vector<unsigned char> m_propsBuffer; ///< Буфер для свойств сессии
+    static inline ProcessTracker myTracker;
 
 
 public:
