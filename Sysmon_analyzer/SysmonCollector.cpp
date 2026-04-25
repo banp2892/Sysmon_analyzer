@@ -7,8 +7,22 @@
 #pragma comment(lib, "tdh.lib")
 #pragma comment(lib, "advapi32.lib")
 
-SysmonCollector::SysmonCollector(const wchar_t* name, PreparationData* prep) : m_sessionName(name) {
-    m_preparator = prep;
+#include <sstream>
+#include <chrono>
+
+long long UtcTimeToLong(const std::wstring& utcStr) {
+    std::wstringstream ss(utcStr);
+    std::tm tm = {};
+    wchar_t discard;
+    int milliseconds = 0;
+
+    ss >> std::get_time(&tm, L"%Y-%m-%d %H:%M:%S");
+    ss >> discard >> milliseconds;
+    std::time_t seconds = _mkgmtime(&tm);
+    return (static_cast<long long>(seconds) * 1000) + milliseconds;
+}
+
+SysmonCollector::SysmonCollector(const wchar_t* name) : m_sessionName(name) {
     std::wcout << L"[DEBUG] Инициализация SysmonCollector для сессии: " << m_sessionName << std::endl;
 
     SetupProperties();
@@ -94,18 +108,37 @@ void SysmonCollector::ParseAndLog(PEVENT_RECORD pEvent, PTRACE_EVENT_INFO pInfo)
     USHORT eventId = pEvent->EventHeader.EventDescriptor.Id;
 
     switch (eventId) {
-    case 1: { // Process Creation
+   case 1: { // Process Creation
         ID_1_SYSMONEVENT_CREATE_PROCESS pd;
         
+        // Извлекаем основные свойства
         pd.UtcTime = GetEventProperty(pEvent, pInfo, L"UtcTime");
         pd.Image = GetEventProperty(pEvent, pInfo, L"Image");
         pd.ProcessId = static_cast<DWORD>(GetEventPropertyInt(pEvent, L"ProcessId"));
         pd.User = GetEventProperty(pEvent, pInfo, L"User");
         pd.CommandLine = GetEventProperty(pEvent, pInfo, L"CommandLine");
+        
+        // КРИТИЧНО: Извлекаем GUID и ParentGuid для построения дерева процессов
+        pd.ProcessGuid = GetGuidProperty(pEvent, L"ProcessGuid");
+        pd.ParentProcessGuid = GetGuidProperty(pEvent, L"ParentProcessGuid");
+        pd.ParentProcessId = static_cast<DWORD>(GetEventPropertyInt(pEvent, L"ParentProcessId"));
 
-        std::wcout << L"[" << pd.UtcTime << L"] [ID: 1] [PROC_CREATE] PID: " << pd.ProcessId
-            << L" | User: " << pd.User << L" | Image: " << pd.Image << std::endl
-            << L"   > Cmd: " << pd.CommandLine << std::endl;
+        // Подготавливаем общий контейнер события
+        SysmonEvent temp_SE;
+        temp_SE.eventId = eventId;
+        temp_SE.timestamp_wstring = pd.UtcTime;
+        temp_SE.timestamp = UtcTimeToLong(pd.UtcTime);
+        
+        // Упаковываем структуру конкретного события в variant
+        temp_SE.eventData = pd;
+
+        // Отправляем на обработку в трекер (через статическую переменную m_tracker)
+
+
+        /*std::wcout << L"[" << pd.UtcTime << L"] [ID: 1] [PROC_CREATE] PID: " << pd.ProcessId
+             << L" | GUID: " << pd.ProcessGuid << std::endl
+             << L"   > Image: " << pd.Image << std::endl;*/
+
         break;
     }
 

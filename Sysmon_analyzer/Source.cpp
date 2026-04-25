@@ -13,16 +13,16 @@
 #pragma comment(lib, "tdh.lib")
 
 #include "SysmonCollector.h"
-#include "PreparationData.h"
+
 
 int main() {
     std::wcout.imbue(std::locale("rus_rus.1251"));
     setlocale(LC_ALL, "Russian");
-    PreparationData preparator;
 
 
 
-    SysmonCollector collector(L"MySysmonSession", &preparator);
+
+    SysmonCollector collector(L"MySysmonSession");
 
     collector.Run();
     return 0;

@@ -5,7 +5,7 @@
 #include <tdh.h>
 #include <vector>
 #include <string>
-#include "PreparationData.h"
+
 #include "Structures.h"
 
 /**
@@ -20,14 +20,14 @@ private:
     TRACEHANDLE m_traceHandle = 0;   ///< Хэндл открытого лога (потребителя)
     std::wstring m_sessionName;      ///< Имя сессии трассировки
     std::vector<unsigned char> m_propsBuffer; ///< Буфер для свойств сессии
-    static inline PreparationData* m_preparator = nullptr; ///< Указатель на обработчик данных
+
 
 public:
     /**
      * @brief Конструктор: подготавливает и запускает сессию Sysmon.
      * @param name Имя сессии трассировки.
      */
-    SysmonCollector(const wchar_t* name, PreparationData* prep);
+    SysmonCollector(const wchar_t* name);
 
     /**
      * @brief Деструктор: останавливает сессию трассировки и освобождает ресурсы.
@@ -101,5 +101,5 @@ private:
      * @return std::wstring Строковое представление GUID в формате {XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX}.
      * Возвращает пустую строку, если свойство не найдено или возникла ошибка доступа.
      */
-    std::wstring GetGuidProperty(PEVENT_RECORD pEvent, const wchar_t* name);
+    static std::wstring GetGuidProperty(PEVENT_RECORD pEvent, const wchar_t* name);
 };

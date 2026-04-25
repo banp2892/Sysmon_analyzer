@@ -513,6 +513,7 @@ struct ID_29_SYSMONEVENT_FILE_EXE_DETECTED {
 struct SysmonEvent {
     long long timestamp;        ///< Время события (из заголовка ETW/SystemTime)
     int eventId;                ///< ID события (1, 2, 3 ... 29)
+    std::wstring timestamp_wstring; ///< Время в формате wstring
 
     /**
      * @brief Объединение всех возможных структур данных событий.

@@ -18,17 +18,11 @@
     <ClCompile Include="Source.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PreparationData.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="SysmonCollector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="PreparationData.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="SysmonCollector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
