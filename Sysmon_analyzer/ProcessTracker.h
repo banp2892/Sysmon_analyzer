@@ -76,6 +76,7 @@ public:
 
     /**
     * @brief Первичная обработка приходяшего лога
+    * @param NewLog - структура специального вида, в которую записан весь лог!
     */
     void LogProcessing(const SysmonEvent& NewLog);
 

@@ -26,7 +26,6 @@ void ProcessTracker::LogProcessing(const SysmonEvent& NewLog)
     std::wcout << L"[TRACKER] ID: " << NewLog.eventId
         << L" | GUID: " << currentGuid;
     if (NewLog.eventId == 3) {
-        // ѕолучаем указатель на структуру данных сетевого событи€
         if (auto* netEvent = std::get_if<ID_3_SYSMONEVENT_NETWORK_CONNECT>(&NewLog.eventData)) {
 
             std::wcout << L"\n[!] NETWORK CONNECTION DETECTED" << std::endl;
@@ -34,7 +33,6 @@ void ProcessTracker::LogProcessing(const SysmonEvent& NewLog)
             std::wcout << L"  User:        " << netEvent->User << std::endl;
             std::wcout << L"  Rule:        " << (netEvent->RuleName.empty() ? L"None" : netEvent->RuleName) << std::endl;
 
-            // Ћокальный и удаленный адреса
             std::wcout << L"  Protocol:    " << netEvent->Protocol
                 << L" (Initiated: " << netEvent->Initiated << L")" << std::endl;
 
