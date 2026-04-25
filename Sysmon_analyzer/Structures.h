@@ -31,9 +31,6 @@ struct ID_1_SYSMONEVENT_CREATE_PROCESS {
     std::wstring ParentImage;        ///< [ParentImage] Путь к исполняемому файлу родителя
     std::wstring ParentCommandLine;  ///< [ParentCommandLine] Командная строка родителя
     std::wstring ParentUser;         ///< [ParentUser] Имя пользователя родительского процесса
-
-    // кастомная аналитика (не из XML манифеста)
-    double entropy = 0.0;            ///< Вычисленная энтропия командной строки или образа
 };
 
 /**

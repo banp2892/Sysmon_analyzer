@@ -88,3 +88,22 @@ private:
     std::mutex _mutex;
     PathNormalizer _normalizer;
 };
+
+void printCustom(const auto& event, const std::vector<std::wstring>& order) {
+    auto data = event.getFields();
+
+    for (const auto& key : order) {
+        if (data.count(key)) {
+            if (key == L"RuleName" && data[key].empty()) {
+                std::wcout << L"None";
+            }
+            else {
+                std::wcout << data[key];
+            }
+        }
+        else {
+            std::wcout << key;
+        }
+    }
+    std::wcout << std::endl;
+}
