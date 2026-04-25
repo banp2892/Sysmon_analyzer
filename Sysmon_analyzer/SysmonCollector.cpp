@@ -106,7 +106,7 @@ void SysmonCollector::EnableSysmon() {
 
 void SysmonCollector::ParseAndLog(PEVENT_RECORD pEvent, PTRACE_EVENT_INFO pInfo) {
     USHORT eventId = pEvent->EventHeader.EventDescriptor.Id;
-
+    //std::wcout << L"DEBUG: Received ID " << eventId << std::endl;
 
     SysmonEvent temp_SE;
     temp_SE.eventId = eventId;
@@ -674,6 +674,19 @@ void SysmonCollector::ParseAndLog(PEVENT_RECORD pEvent, PTRACE_EVENT_INFO pInfo)
         myTracker.LogProcessing(temp_SE);
     }
 
+
+    if (!temp_SE.timestamp_wstring.empty()) {
+        temp_SE.timestamp = UtcTimeToLong(temp_SE.timestamp_wstring);
+        myTracker.LogProcessing(temp_SE);
+        static int eventCounter = 0;
+        eventCounter++;
+
+        if (eventCounter >= 50) {
+            myTracker.ShowProcessesMonitor();
+            eventCounter = 0;
+        }
+    }
+
 }
 
 std::wstring SysmonCollector::GetEventProperty(PEVENT_RECORD pEvent, PTRACE_EVENT_INFO pInfo, const wchar_t* name) {
@@ -735,7 +748,7 @@ std::wstring SysmonCollector::GetGuidProperty(PEVENT_RECORD pEvent, const wchar_
 
 void WINAPI SysmonCollector::OnEventRecord(PEVENT_RECORD pEvent) {
 
-    std::wcout << L"!" << std::flush;
+    //std::wcout << L"!" << std::flush;
     DWORD size = 0;
     if (TdhGetEventInformation(pEvent, 0, NULL, NULL, &size) == ERROR_INSUFFICIENT_BUFFER) {
         std::vector<BYTE> info(size);

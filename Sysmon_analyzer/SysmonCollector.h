@@ -42,6 +42,8 @@ public:
      */
     void Run();
 
+
+    ProcessTracker& getTracker() { return myTracker; }
 private:
     /**
      * @brief Инициализирует структуру EVENT_TRACE_PROPERTIES в буфере.
