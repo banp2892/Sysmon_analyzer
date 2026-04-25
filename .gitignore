@@ -367,3 +367,7 @@ html/
 latex/
 *.tmp
 doxygen_objdb_*.tmp
+
+# My_data
+Data*
+/Sysmon_analyzer/Data_1777144779014.txt
