@@ -1,4 +1,4 @@
-#include "SysmonCollector.h"
+﻿#include "SysmonCollector.h"
 #include <iostream>
 #include <objbase.h>
 
@@ -96,6 +96,7 @@ void SysmonCollector::ParseAndLog(PEVENT_RECORD pEvent, PTRACE_EVENT_INFO pInfo)
     switch (eventId) {
     case 1: { // Process Creation
         ID_1_SYSMONEVENT_CREATE_PROCESS pd;
+        
         pd.UtcTime = GetEventProperty(pEvent, pInfo, L"UtcTime");
         pd.Image = GetEventProperty(pEvent, pInfo, L"Image");
         pd.ProcessId = static_cast<DWORD>(GetEventPropertyInt(pEvent, L"ProcessId"));
@@ -191,10 +192,15 @@ void SysmonCollector::ParseAndLog(PEVENT_RECORD pEvent, PTRACE_EVENT_INFO pInfo)
         apd.UtcTime = GetEventProperty(pEvent, pInfo, L"UtcTime");
         apd.SourceImage = GetEventProperty(pEvent, pInfo, L"SourceImage");
         apd.TargetImage = GetEventProperty(pEvent, pInfo, L"TargetImage");
-        apd.GrantedAccess = GetEventProperty(pEvent, pInfo, L"GrantedAccess");
 
-        std::wcout << L"[" << apd.UtcTime << L"] [ID:10] [PROC_ACCESS] Src: " << apd.SourceImage
-            << L" -> Tgt: " << apd.TargetImage << L" | Mask: " << apd.GrantedAccess << std::endl;
+        // Используем твою новую функцию
+        DWORD accessMask = GetEventPropertyInt(pEvent, L"GrantedAccess");
+
+        std::wcout << L"[" << apd.UtcTime << L"] [ID:10] [PROC_ACCESS] "
+            << L"Src: " << (apd.SourceImage.empty() ? L"Unknown" : apd.SourceImage)
+            << L" -> Tgt: " << (apd.TargetImage.empty() ? L"Unknown" : apd.TargetImage)
+            << L" | Mask: 0x" << std::hex << std::setw(8) << std::setfill(L'0') << accessMask
+            << std::dec << std::endl;
         break;
     }
 
@@ -272,8 +278,6 @@ void SysmonCollector::ParseAndLog(PEVENT_RECORD pEvent, PTRACE_EVENT_INFO pInfo)
     }
 
     default:
-        // Для всех остальных ID (4, 15, 16, 19, 20, 21, 24, 27, 28)
-        // Выводим хотя бы факт события
         std::wcout << L"[" << GetEventProperty(pEvent, pInfo, L"UtcTime") << L"] [ID:" << eventId << L"] Generic Event detected." << std::endl;
         break;
     }
@@ -332,6 +336,8 @@ std::wstring SysmonCollector::GetGuidProperty(PEVENT_RECORD pEvent, const wchar_
     }
     return L"";
 }
+
+
 
 
 void WINAPI SysmonCollector::OnEventRecord(PEVENT_RECORD pEvent) {

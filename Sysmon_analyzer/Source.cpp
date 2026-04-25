@@ -16,6 +16,7 @@
 #include "PreparationData.h"
 
 int main() {
+    std::wcout.imbue(std::locale("rus_rus.1251"));
     setlocale(LC_ALL, "Russian");
     PreparationData preparator;
 
