@@ -24,17 +24,9 @@ void ProcessTracker::LogProcessing(const SysmonEvent& NewLog)
     std::lock_guard<std::mutex> lock(_dataMutex);
 
 
-
-    if (NewLog.eventId == 1) {
-        const auto& data = std::get<ID_1_SYSMONEVENT_CREATE_PROCESS>(NewLog.eventData);
-
-        std::wstring normImage = _normalizer.Normalize(data.Image);
-        std::wstring normCmd = _normalizer.Normalize(data.CommandLine);
-
-    }
     
 
-    if (_processes.contains(currentGuid)) {
+    if (_processes.contains(currentGuid)) { ///< нужно добавить вывод всего лога, если получили такую ситуацию
         if (NewLog.eventId == 1) {
             std::wcerr << L" [!] CRITICAL ANOMALY: ID 1 received for existing GUID: "
                 << currentGuid << std::endl;
@@ -51,18 +43,39 @@ void ProcessTracker::LogProcessing(const SysmonEvent& NewLog)
 
 void ProcessTracker::UpdateProcessNode(std::wstring& currentGuid, SysmonEvent NewLog)
 {
-    _processes[currentGuid].Sequence.push_back(NewLog.eventId); ///> ƒобавили в конец последовательности ID пришедшего лога
-    _processes[currentGuid].LastEventTime = NewLog.timestamp; ///> мен€ем врем€ последнего лога дл€ текущего процесса
+    _processes[currentGuid].SequenceID.push_back(NewLog.eventId); ///< ƒобавили в конец последовательности ID пришедшего лога
+    _processes[currentGuid].LastEventTime = NewLog.timestamp; ///< мен€ем врем€ последнего лога дл€ текущего процесса
+
+    auto getImage = [](auto&& arg)->std::wstring {
+        if constexpr (requires { arg.Image; }) {
+            return arg.Image;
+        }
+        return L"";
+    };
+
+    std::wstring Image = std::visit(getImage, NewLog.eventData);
+    if (Image != L"") {
+        if (_processes[currentGuid].NamesForThisGUID.back() != Image) {
+            _processes[currentGuid].NamesForThisGUID.push_back(Image); ///< добавл€ем им€ файла, который что-то сделал 
+        }
+    }
 
 }
 
 void ProcessTracker::AddNewProcessNode(std::wstring& currentGuid, SysmonEvent NewLog)
 {
-    _processes[currentGuid].Sequence.push_back(NewLog.eventId); ///> ƒобавили в конец последовательности ID пришедшего лога
-    _processes[currentGuid].LastEventTime = NewLog.timestamp; ///> ”станавливаем врем€, когда открыли запись дл€ текущего процесса
-    _processes[currentGuid].FirstEventTime = NewLog.timestamp;///> мен€ем врем€ последнего лога дл€ текущего процесса
+    _processes[currentGuid].SequenceID.push_back(NewLog.eventId); ///< ƒобавили в конец последовательности ID пришедшего лога
+    _processes[currentGuid].LastEventTime = NewLog.timestamp; ///< ”станавливаем врем€, когда открыли запись дл€ текущего процесса
+    _processes[currentGuid].FirstEventTime = NewLog.timestamp;///< мен€ем врем€ последнего лога дл€ текущего процесса
 
-
+    auto* Pid1 = std::get_if<ID_1_SYSMONEVENT_CREATE_PROCESS>(&NewLog.eventData); 
+    if (Pid1) {
+        if (!_processes[currentGuid].NamesForThisGUID.empty()) {
+            if (_processes[currentGuid].NamesForThisGUID.back() != NormalizePathFunc(Pid1->Image)) {
+                _processes[currentGuid].NamesForThisGUID.push_back(NormalizePathFunc(Pid1->Image)); ///< если пришел айди 1, и им€ помен€лось, то мы запишем им€
+            }
+        }
+    }
 }
 
 
@@ -81,18 +94,30 @@ void ProcessTracker::ShowProcessesMonitor() {
     std::wcout << L" Total processes tracked: " << _processes.size() << std::endl;
     std::wcout << L"------------------------------------------------------------" << std::endl;
     std::wstringstream ss;
-    for (const auto& [guid, node] : _processes) {
+
+    for (const auto& [guid, node] : _processes) { ///< ƒл€ каждого процесса выводитс€ така€ табличка:
         ss<<"GUID: "<< guid << std::endl;
         ss << "First Time: " << node.FirstEventTime << std::endl;
         ss << "Last Time: " << node.LastEventTime << std::endl;
 
-        ss << "Seq: ";
-        for (auto ID_number : node.Sequence) {
+        ss << "Seq_ID: ";
+        for (auto ID_number : node.SequenceID) {
             ss << ID_number << ", ";
         }
         ss << std::endl;
-        ss<<"-----------------------"<< std::endl;
 
+
+
+
+
+
+
+
+
+
+
+
+        ss<<"-----------------------"<< std::endl;
     }
 
 

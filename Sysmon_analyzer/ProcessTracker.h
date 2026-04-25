@@ -15,7 +15,9 @@ struct ProcessNode {
 
     long long FirstEventTime;
     long long LastEventTime;
-    std::vector<UCHAR>Sequence;
+
+    std::vector<std::wstring> NamesForThisGUID;
+    std::vector<UCHAR>SequenceID;
 };
 
 class ProcessTracker {
@@ -38,6 +40,7 @@ public:
 private:
     std::map<std::wstring, ProcessNode> _processes;
     std::mutex _dataMutex;
-    PathNormalizer _normalizer;
+
+
 };
 
